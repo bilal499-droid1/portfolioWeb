@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #e10b0b;
+  --color-coral: #f8726b;
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Unbounded", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-bebas: "Bebas Neue", Impact, sans-serif;
+  --font-script: "Parisienne", cursive;
+  --font-jost: "Jost", "Futura", sans-serif;
+  --font-roboto: "Roboto", ui-sans-serif, sans-serif;
+  --font-inter: "Inter", ui-sans-serif, sans-serif;
+  /* Segoe UI where installed (Windows), Open Sans elsewhere. */
+  --font-services: "Segoe UI", "Open Sans", ui-sans-serif, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: #030303;
+}
+
+/* Blends the poster's hard black edges into the page background. */
+.poster-vignette {
+  --mask: radial-gradient(ellipse 60% 58% at 50% 48%, #000 55%, transparent 100%);
+  -webkit-mask-image: var(--mask);
+  mask-image: var(--mask);
+}
