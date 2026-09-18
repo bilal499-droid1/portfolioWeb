@@ -41,8 +41,8 @@ function Connector({ position, width, height, points, dot }) {
 function HeroDetails() {
   return (
     <div
-      className="pointer-events-none absolute inset-x-0 top-24 bottom-[10.3vw] z-[5] hidden select-none lg:block"
-      style={{ '--k': `min(calc(100vw / 910), calc((100svh - 6rem - 10.3vw) / ${SAMPLE_HEIGHT}))` }}
+      className="pointer-events-none absolute inset-x-0 top-24 bottom-[1.7vw] z-[5] hidden select-none lg:block"
+      style={{ '--k': `min(calc(100vw / 910), calc((100svh - 6rem - 1.7vw) / ${SAMPLE_HEIGHT}))` }}
     >
       {/* Title + intro */}
       <div className="absolute" style={{ left: k(38), top: y(100), width: k(215) }}>
@@ -61,24 +61,24 @@ function HeroDetails() {
 
       {/* Info card with the tagline 40px below it, stacked up from the ribbon. */}
       <div className="absolute flex flex-col items-start gap-10" style={{ left: k(35), bottom: k(8) }}>
-        <div className="relative">
+        <div className="relative" style={{ marginLeft: k(40) }}>
           <dl
             className="border border-white/15 font-roboto"
-            style={{ ...cardStyle, width: k(220), padding: `${k(13)} ${k(13)} ${k(19)}` }}
+            style={{ ...cardStyle, width: k(255), padding: `${k(16)} ${k(16)} ${k(22)}` }}
           >
             {INFO.map(({ label, value }, i) => (
-              <div key={label} style={{ marginTop: i ? k(10) : 0 }}>
-                <dt className="font-medium text-[#b33333]" style={{ fontSize: k(11) }}>
+              <div key={label} style={{ marginTop: i ? k(12) : 0 }}>
+                <dt className="font-medium text-[#b33333]" style={{ fontSize: k(12.5) }}>
                   {label}
                 </dt>
-                <dd className="text-[#b06262]" style={{ fontSize: k(9.5), marginTop: k(2) }}>
+                <dd className="text-[#b06262]" style={{ fontSize: k(10.5), marginTop: k(3) }}>
                   {value}
                 </dd>
               </div>
             ))}
           </dl>
           <Connector
-            position={{ left: '100%', top: k(92) }}
+            position={{ left: '100%', top: k(104) }}
             width={80}
             height={50}
             points="0,12 36,12 62,36"
@@ -117,22 +117,22 @@ function HeroDetails() {
       {/* About / CV card */}
       <div
         className="pointer-events-auto absolute border border-white/15 font-roboto"
-        style={{ ...cardStyle, right: k(30), top: y(178), width: k(190), padding: `${k(20)} ${k(12)} ${k(8)}` }}
+        style={{ ...cardStyle, right: k(70), top: y(178), width: k(240), padding: `${k(22)} ${k(15)} ${k(10)}` }}
       >
-        <p className="text-center text-[#8a2e2e]" style={{ fontSize: k(6.5) }}>
+        <p className="text-center text-[#8a2e2e]" style={{ fontSize: k(8.5) }}>
           A little something about me
         </p>
         <a
           href="#"
           className="flex items-center justify-center border border-[#5a1818] bg-linear-to-b from-[#3a0808] to-[#1c0202] font-medium text-[#df6464] transition-colors hover:border-[#8a2a2a] hover:text-[#f08080]"
-          style={{ height: k(37), borderRadius: k(6), marginTop: k(10), gap: k(6), fontSize: k(9) }}
+          style={{ height: k(44), borderRadius: k(7), marginTop: k(12), gap: k(7), fontSize: k(11) }}
         >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ width: k(9), height: k(9) }}>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ width: k(11), height: k(11) }}>
             <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5L13 3.5ZM8 12v1.6h8V12H8Zm0 3.5v1.6h8v-1.6H8Z" />
           </svg>
           Download CV
         </a>
-        <div className="flex justify-end" style={{ gap: k(7), marginTop: k(11) }}>
+        <div className="flex justify-end" style={{ gap: k(8), marginTop: k(12) }}>
           {[
             { label: 'LinkedIn', text: 'in' },
             { label: 'Behance', text: 'Bē' },
@@ -142,14 +142,20 @@ function HeroDetails() {
               href="#"
               aria-label={label}
               className="grid place-items-center rounded-full bg-[#3a1010] font-bold text-[#9a5a5a] transition-colors hover:text-[#e08a8a]"
-              style={{ width: k(19), height: k(19), fontSize: k(8.5) }}
+              style={{ width: k(23), height: k(23), fontSize: k(10) }}
             >
               {text}
             </a>
           ))}
         </div>
+        <Connector
+          position={{ right: `calc(100% - ${k(15)})`, top: `calc(100% - ${k(4)})` }}
+          width={70}
+          height={70}
+          points="15,59 55,30 55,4"
+          dot={[15, 59]}
+        />
       </div>
-      <Connector position={{ right: k(200), top: y(288) }} width={70} height={70} points="15,59 55,30 55,4" dot={[15, 59]} />
 
       {/* Services */}
       <ul className="absolute" style={{ right: k(30), top: y(385), width: k(200) }}>

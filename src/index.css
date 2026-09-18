@@ -14,6 +14,20 @@
   --font-inter: "Inter", ui-sans-serif, sans-serif;
   /* Segoe UI where installed (Windows), Open Sans elsewhere. */
   --font-services: "Segoe UI", "Open Sans", ui-sans-serif, sans-serif;
+  --font-ribbon: "Open Sans", ui-sans-serif, sans-serif;
+
+  /* Ribbon text stream: the track holds two identical groups, so shifting it by
+     half its width loops seamlessly. */
+  --animate-marquee: marquee 45s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 html,

@@ -14,8 +14,7 @@ function App() {
       >
         <Header />
 
-        {/* Bottom padding keeps the poster (and its PORTFOLIO label) above the ribbon. */}
-        <main className="flex min-h-0 flex-1 items-center justify-center pb-[8.4vw]">
+        <main className="flex min-h-0 flex-1 items-center justify-center">
           <RevealPoster />
         </main>
 

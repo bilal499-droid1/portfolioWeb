@@ -1,4 +1,5 @@
 import glassHi from '../assets/glass-hi.webp'
+import LiquidGlass from './LiquidGlass'
 
 // Second screen ("About me"), measured from sample2 (a 762px-wide mock-up).
 // --u is one sample pixel, scaled to the viewport width and capped on very wide
@@ -15,7 +16,7 @@ function AboutIntro() {
     <section
       id="about"
       className="relative overflow-hidden bg-[#0b0101] font-inter"
-      style={{ '--u': 'min(calc(100vw / 762), 2.2px)', paddingTop: u(69), paddingBottom: u(248) }}
+      style={{ '--u': 'min(calc(100vw / 762), 2.2px)', paddingTop: `calc(11.5vw + ${u(50)})`, paddingBottom: u(248) }}
     >
       {/* Red glow low in the section, then the faint dot grid over everything. */}
       <div
@@ -53,11 +54,10 @@ function AboutIntro() {
             <span className={nameLineClass}>Talha</span>
             <span className={nameLineClass}>Mushtaq</span>
           </h2>
-          <img
+          <LiquidGlass
             src={glassHi}
             alt="Hi, I am"
-            draggable="false"
-            className="pointer-events-none absolute top-1/2 left-1/2 max-w-none drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] select-none"
+            className="absolute top-1/2 left-1/2 max-w-none drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]"
             style={{ width: u(150), transform: `translate(calc(-50% - ${u(12)}), calc(-50% + ${u(9)}))` }}
           />
         </div>
