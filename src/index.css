@@ -28,6 +28,33 @@
       transform: translateX(-50%);
     }
   }
+
+  /* Hero nebula: clouds loop around a closed path (each layer sets its own
+     duration), and the wisp layer turns a full circle. */
+  --animate-nebula-orbit: nebula-orbit 20s ease-in-out infinite;
+  --animate-nebula-swirl: nebula-swirl 50s linear infinite;
+
+  @keyframes nebula-orbit {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    25% {
+      transform: translate3d(16%, -10%, 0) scale(1.15);
+    }
+    50% {
+      transform: translate3d(6%, -18%, 0) scale(0.9);
+    }
+    75% {
+      transform: translate3d(-14%, -6%, 0) scale(1.12);
+    }
+  }
+
+  @keyframes nebula-swirl {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 }
 
 html,
