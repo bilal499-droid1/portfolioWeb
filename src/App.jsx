@@ -13,12 +13,14 @@ function App() {
         className="relative flex h-svh flex-col overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: `url(${bgPortfolio})` }}
       >
-        <Nebula />
         <Header />
 
         <main className="flex min-h-0 flex-1 items-center justify-center">
           <RevealPoster />
         </main>
+
+        {/* Above the poster, below the cards and header, so the smoke drifts across the face. */}
+        <Nebula />
 
         <HeroDetails />
       </div>
