@@ -11,7 +11,8 @@ import { useEffect, useRef } from 'react'
 const RESOLUTION = 0.25 // canvas pixels per CSS pixel
 const FRAME_INTERVAL = 1000 / 30 // ms; the smoke moves too softly to need 60fps
 const SPEED = 0.16 // how fast the smoke folds and drifts
-const SCALE = 1.15 // cloud size: lower means fewer, larger clouds
+const SCALE = 3.0 // cloud size: lower means fewer, larger clouds
+const COLOR = [1.0, 0.0, 0.0] // #ff0000
 
 const VERTEX_SHADER = `
 attribute vec2 aPos;
@@ -22,15 +23,19 @@ void main() {
 }`
 
 const FRAGMENT_SHADER = `
-precision mediump float;
+precision highp float;
 uniform vec2 uRes;
 uniform float uTime;
 varying vec2 vUv;
 
+// Every intermediate here stays below ~35, so the hash survives both highp and
+// the mediump fallback. The previous version multiplied by (123.34, 456.21) and
+// then squared it, overflowing mediump's ~65504 ceiling and collapsing the noise
+// into flat regions across half the screen.
 float hash(vec2 p) {
-  p = fract(p * vec2(123.34, 456.21));
-  p += dot(p, p + 45.32);
-  return fract(p.x * p.y);
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
 }
 
 float noise(vec2 p) {
@@ -54,23 +59,33 @@ float fbm(vec2 p) {
 }
 
 void main() {
-  vec2 p = vUv * vec2(uRes.x / uRes.y, 1.0) * ${SCALE.toFixed(2)};
+  // Centred on the viewport so the field is symmetric left to right, and so the
+  // coordinates stay small either side of zero. vUv.y is 1 at the top.
+  vec2 p = (vUv - 0.5) * vec2(uRes.x / uRes.y, 1.0) * ${SCALE.toFixed(2)};
+  p.y *= 0.62; // stretch the clouds vertically into plumes rather than blobs
   float t = uTime * ${SPEED.toFixed(3)};
 
-  // Two rounds of warping bend the noise into rolling, folding smoke.
-  vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, 1.3) - t * 0.7));
-  vec2 r = vec2(fbm(p + 2.2 * q + vec2(1.7, 9.2) + t * 1.3),
-                fbm(p + 2.2 * q + vec2(8.3, 2.8) - t * 0.9));
+  // Two rounds of warping bend the noise into rolling, folding smoke. Time is
+  // subtracted from y throughout, which walks the field upward: the smoke rises.
+  vec2 q = vec2(fbm(p - vec2(0.0, t)), fbm(p + vec2(5.2, 1.3) - vec2(0.0, t * 0.7)));
+  vec2 r = vec2(fbm(p + 2.2 * q + vec2(1.7, 9.2) - vec2(0.0, t * 1.3)),
+                fbm(p + 2.2 * q + vec2(8.3, 2.8) - vec2(0.0, t * 0.9)));
   float f = fbm(p + 1.8 * r);
 
-  float density = smoothstep(0.15, 0.8, f);
+  // The floor is high enough to leave near-black voids between the clouds;
+  // without it the screen blend floods the whole hero and swallows the copy.
+  float density = smoothstep(0.30, 0.88, f);
   float heat = smoothstep(0.55, 1.0, f * (0.6 + length(q)));
 
-  vec3 deep = vec3(0.10, 0.02, 0.012);
-  vec3 warm = vec3(0.19, 0.045, 0.025);
-  vec3 hot = vec3(0.06, 0.022, 0.01);
-  vec3 color = mix(deep, warm, density) * density + hot * heat * density;
-  gl_FragColor = vec4(color, 1.0);
+  // Rising plume: thickest low in the frame, thinning toward the top, which is
+  // the falloff sample2 shows. Peak brightness is tuned to that mock-up's
+  // densest red (#7d0606, i.e. 0.49 on the red channel).
+  float rise = mix(0.58, 1.0, smoothstep(1.0, 0.0, vUv.y));
+
+  // One hue throughout; only the brightness varies, so the smoke reads as
+  // ${COLOR.map((c) => Math.round(c * 255)).join(', ')} everywhere it is visible.
+  float glow = density * (0.20 + 0.56 * heat) * rise;
+  gl_FragColor = vec4(vec3(${COLOR.map((c) => c.toFixed(1)).join(', ')}) * glow, 1.0);
 }`
 
 function compile(gl, type, source) {
