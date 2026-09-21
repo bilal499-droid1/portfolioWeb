@@ -187,6 +187,8 @@ function RevealPoster() {
   return (
     <div
       ref={frameRef}
+      data-reveal="up-sm"
+      data-hero="1"
       className="relative aspect-[1038/1080] h-[115%] max-w-full shrink-0 cursor-none touch-none self-end select-none"
     >
       {/* Screen-blended with the page background; the blend is set on the wrapper

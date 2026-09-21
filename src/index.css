@@ -38,6 +38,14 @@ body,
   background: #030303;
 }
 
+/* Anchor links (nav, "My work", "Back to top") glide instead of jumping. Ordinary
+   wheel and touch scrolling stay the browser's own. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Blends the poster's hard black edges into the page background. */
 .poster-vignette {
   --mask: radial-gradient(ellipse 60% 58% at 50% 48%, #000 55%, transparent 100%);

@@ -189,6 +189,8 @@ function Nebula() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
+      data-reveal="fade-slow"
+      data-hero="1"
       className="pointer-events-none absolute inset-0 z-0 size-full opacity-30 blur-lg mix-blend-screen"
     />
   )

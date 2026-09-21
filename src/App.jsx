@@ -11,8 +11,11 @@ import Trajectory from './components/Trajectory'
 import WelcomeBanner from './components/WelcomeBanner'
 import WorkList from './components/WorkList'
 import bgPortfolio from './assets/bg-portfolio.webp'
+import useScrollReveal from './useScrollReveal'
 
 function App() {
+  useScrollReveal()
+
   return (
     <div id="top" className="relative font-sans">
       <div

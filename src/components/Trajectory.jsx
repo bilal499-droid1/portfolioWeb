@@ -81,7 +81,7 @@ function Entry({ entry, index, total }) {
   const fade = 1 - (index / (total - 1)) * 0.62
 
   return (
-    <li className="relative grid grid-cols-[minmax(0,1fr)] gap-y-[1rem] border-t border-white/[0.05] pt-[1.5rem] pb-[2.2rem] sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-y-0">
+    <li data-reveal="up" className="relative grid grid-cols-[minmax(0,1fr)] gap-y-[1rem] border-t border-white/[0.05] pt-[1.5rem] pb-[2.2rem] sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-y-0">
       {featured && (
         <span
           aria-hidden="true"
@@ -204,18 +204,18 @@ function Trajectory() {
       />
 
       <div className="relative mx-auto max-w-[56rem] px-[6vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,8vw,7rem)]">
-        <p className="flex justify-center">
+        <p data-reveal="up-sm" className="flex justify-center">
           <span className="inline-flex items-center gap-[0.45rem] rounded-full border border-[#e1201a]/35 bg-[#1a0505]/70 px-[0.8rem] py-[0.28rem] text-[0.5625rem] tracking-[0.2em] text-[#d8534c] uppercase">
             <span aria-hidden="true" className="size-[4px] rotate-45 bg-[#e1201a]" />
             Chronology &amp; Evolution
           </span>
         </p>
 
-        <h2 className="mt-[1.35rem] text-center text-[clamp(1.5rem,2.45vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.02em] text-white">
+        <h2 data-reveal="up" className="mt-[1.35rem] text-center text-[clamp(1.5rem,2.45vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.02em] text-white">
           Trajectory Across Design &amp; Code
         </h2>
 
-        <p className="mx-auto mt-[0.9rem] max-w-[27rem] text-center text-[0.8125rem] leading-[1.6] text-white/35">
+        <p data-reveal="up" className="mx-auto mt-[0.9rem] max-w-[27rem] text-center text-[0.8125rem] leading-[1.6] text-white/35">
           An open-ended dual timeline tracking academic foundations through high-impact product architecture and
           forward-looking autonomous AI design systems.
         </p>

@@ -63,12 +63,12 @@ function DesignerIntro() {
       <div className="relative mx-auto flex min-h-svh max-w-[1600px] items-center px-[8vw] pt-[4rem] pb-[10rem] lg:pr-[14vw]">
         <div className="grid w-full grid-cols-1 items-center gap-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-[6vw]">
           <div>
-            <p className="flex items-center gap-[0.55rem] text-[0.625rem] font-medium tracking-[0.3em] text-coral uppercase">
+            <p data-reveal="up-sm" className="flex items-center gap-[0.55rem] text-[0.625rem] font-medium tracking-[0.3em] text-coral uppercase">
               <span aria-hidden="true" className="h-px w-[18px] bg-coral/80" />
               Product Designer &amp; Creative Technologist
             </p>
 
-            <h2 className="mt-[1.6rem] max-w-[37.5rem] font-sans text-[clamp(2.1rem,3.7vw,3.35rem)] leading-[0.96] font-light tracking-[-0.03em] text-white/95">
+            <h2 data-reveal="up" className="mt-[1.6rem] max-w-[37.5rem] font-sans text-[clamp(2.1rem,3.7vw,3.35rem)] leading-[0.96] font-light tracking-[-0.03em] text-white/95">
               I&apos;m a{' '}
               <span className="font-accent relative font-normal text-coral italic">
                 UI/UX designer
@@ -77,13 +77,14 @@ function DesignerIntro() {
               who builds what I design. Design systems, prototypes, responsive interfaces from research to launch.
             </h2>
 
-            <p className="mt-[1.9rem] max-w-[28rem] text-[0.875rem] leading-[1.65] text-white/45">
+            <p data-reveal="up" className="mt-[1.9rem] max-w-[28rem] text-[0.875rem] leading-[1.65] text-white/45">
               Bridging the chasm between meticulous visual craft and production-ready code. Focusing on fintech,
               high-utility SaaS, and expressive brand-led applications.
             </p>
 
             <a
               href="#work"
+              data-reveal="up"
               className="group relative mt-[2.2rem] inline-flex h-[3.1rem] w-[8.4rem] items-center justify-center overflow-hidden rounded-[10px] border border-coral/45 text-[0.95rem] text-white/90 transition-colors duration-300 hover:border-coral/80 hover:text-white"
             >
               <span
@@ -96,9 +97,13 @@ function DesignerIntro() {
               <span className="relative">My work</span>
             </a>
 
-            <div aria-hidden="true" className="mt-[2.6rem] h-px max-w-[26.75rem] bg-linear-to-r from-white/15 to-transparent" />
+            <div
+              aria-hidden="true"
+              data-reveal="fade"
+              className="mt-[2.6rem] h-px max-w-[26.75rem] bg-linear-to-r from-white/15 to-transparent"
+            />
 
-            <dl className="mt-[1.4rem] grid max-w-[26.75rem] grid-cols-3">
+            <dl data-reveal="up" className="mt-[1.4rem] grid max-w-[26.75rem] grid-cols-3">
               {STATS.map((stat) => (
                 <div key={stat.label}>
                   <dt
@@ -114,7 +119,7 @@ function DesignerIntro() {
             </dl>
           </div>
 
-          <div className="relative w-[clamp(15rem,23.5vw,21.2rem)] justify-self-center lg:justify-self-end">
+          <div data-reveal="right" className="relative w-[clamp(15rem,23.5vw,21.2rem)] justify-self-center lg:justify-self-end">
             <div
               className="relative rounded-[13px] border border-white/[0.07] p-[0.7rem]"
               style={{

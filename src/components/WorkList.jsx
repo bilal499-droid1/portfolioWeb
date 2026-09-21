@@ -20,7 +20,7 @@ const TAGS = ['Javascript', 'Figma', 'React', 'Tailwind']
 
 function ProjectCard({ n, title }) {
   return (
-    <article className="group relative overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0e0403] px-[clamp(1.75rem,3.75vw,3.4rem)] pt-[clamp(3rem,7.4vw,6.7rem)] pb-[clamp(2.5rem,5.5vw,5rem)] transition-colors duration-500 hover:border-[#e1201a]/35">
+    <article data-reveal="up-lg" className="group relative overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0e0403] px-[clamp(1.75rem,3.75vw,3.4rem)] pt-[clamp(3rem,7.4vw,6.7rem)] pb-[clamp(2.5rem,5.5vw,5rem)] transition-colors duration-500 hover:border-[#e1201a]/35">
       {/* Red bloom, revealed on hover. */}
       <span
         aria-hidden="true"
@@ -40,7 +40,7 @@ function ProjectCard({ n, title }) {
         {n}
       </span>
 
-      <div className="relative max-w-[46rem]">
+      <div data-reveal="up" data-reveal-delay="160" className="relative max-w-[46rem]">
         <p className="text-[0.625rem] tracking-[0.18em] text-[#d23f50]">
           {n} <span className="px-[0.25em] text-[#d23f50]/60">/</span> {TOTAL}
         </p>
@@ -103,7 +103,7 @@ function WorkList() {
       />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(4rem,8vw,7rem)] pb-[clamp(4rem,8vw,7rem)] lg:pr-[24vw]">
-        <h2 className="mb-[clamp(3rem,7vw,6.5rem)] text-center text-[clamp(2.25rem,5vw,4.5rem)] leading-none font-bold tracking-[-0.02em] text-white lg:-mr-[16vw]">
+        <h2 data-reveal="up" className="mb-[clamp(3rem,7vw,6.5rem)] text-center text-[clamp(2.25rem,5vw,4.5rem)] leading-none font-bold tracking-[-0.02em] text-white lg:-mr-[16vw]">
           My Work
         </h2>
 

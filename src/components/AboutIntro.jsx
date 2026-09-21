@@ -38,6 +38,7 @@ function AboutIntro() {
 
       <div className="relative flex flex-col items-center px-4">
         <span
+          data-reveal="up-sm"
           className="inline-flex items-center rounded-full border border-[#4e0b0b] tracking-wide text-[#b03434] uppercase"
           style={{ height: u(22), paddingInline: u(12), gap: u(22), fontSize: `max(10px, ${u(7)})` }}
         >
@@ -46,7 +47,7 @@ function AboutIntro() {
           <span style={{ width: u(12) }} />
         </span>
 
-        <div className="relative text-center" style={{ marginTop: u(46) }}>
+        <div data-reveal="up-lg" className="relative text-center" style={{ marginTop: u(46) }}>
           <h2
             className="font-sans font-bold tracking-[-0.01em] uppercase"
             style={{ fontSize: u(129), lineHeight: 0.87 }}
@@ -63,6 +64,7 @@ function AboutIntro() {
         </div>
 
         <ul
+          data-reveal="up-sm"
           className="flex flex-wrap items-center justify-center text-[#d9d9d9] uppercase"
           style={{ marginTop: u(76), columnGap: u(30), rowGap: 8, fontSize: `max(11px, ${u(8.5)})` }}
         >

@@ -16,6 +16,7 @@ const SKILLS = [
 function SkillCard({ title, blurb, tags }) {
   return (
     <article
+      data-reveal="scale"
       className="relative flex w-[clamp(17rem,24vw,21.5rem)] flex-col rounded-[16px] border border-white/[0.07] px-[1.25rem] pt-[5rem] pb-[3.6rem]"
       style={{ backgroundImage: 'linear-gradient(180deg, #131111 0%, #0c0b0b 62%)' }}
     >
@@ -83,6 +84,7 @@ function Skills() {
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,9vw,8rem)]">
         <h2
+          data-reveal="fade-slow"
           className="text-center font-sans text-[18vw] leading-[0.85] font-extrabold tracking-[0.02em] select-none"
           style={{ WebkitTextStroke: '1px rgba(228,60,54,0.16)', color: 'transparent' }}
         >

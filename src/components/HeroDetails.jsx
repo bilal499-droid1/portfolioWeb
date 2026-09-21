@@ -64,7 +64,7 @@ function HeroDetails() {
       }}
     >
       {/* Title + intro */}
-      <div className="absolute" style={{ left: k(38), top: y(100), width: k(215) }}>
+      <div data-reveal="up" data-hero="2" className="absolute" style={{ left: k(38), top: y(100), width: k(215) }}>
         <h1 className="flex items-baseline whitespace-nowrap" style={{ gap: k(5) }}>
           <span className="font-bebas leading-none text-[#ec201d]" style={{ fontSize: k(38) }}>
             UI/UX
@@ -82,6 +82,8 @@ function HeroDetails() {
           column spans the full width so the card's margin can be measured from the centre. */}
       <div className="absolute inset-x-0 flex flex-col items-start gap-10" style={{ bottom: k(8) }}>
         <div
+          data-reveal="left"
+          data-hero="3"
           className="relative"
           style={{ marginLeft: `calc(50% - 0.24 * var(--pw) - ${k(FACE_GAP + INFO_WIDTH)})` }}
         >
@@ -110,7 +112,7 @@ function HeroDetails() {
           />
         </div>
 
-        <p className="leading-none text-white" style={{ marginLeft: k(38) }}>
+        <p data-reveal="up-sm" data-hero="4" className="leading-none text-white" style={{ marginLeft: k(38) }}>
           <span className="block whitespace-nowrap">
             <span className="font-bebas" style={{ fontSize: k(19) }}>
               CREATING
@@ -132,6 +134,8 @@ function HeroDetails() {
 
       {/* Creative portfolio pill */}
       <span
+        data-reveal="fade"
+        data-hero="3"
         className="absolute rounded-full border border-white/50 font-inter tracking-wide text-[#d0d0d0] uppercase"
         style={{ right: k(32), top: y(108), fontSize: k(8.5), padding: `${k(5)} ${k(11)}` }}
       >
@@ -140,6 +144,8 @@ function HeroDetails() {
 
       {/* About / CV card */}
       <div
+        data-reveal="right"
+        data-hero="4"
         className="pointer-events-auto absolute border border-white/15 font-roboto"
         style={{ ...cardStyle, left: faceRight, top: y(178), width: k(CV_WIDTH), padding: `${c(22)} ${c(15)} ${c(10)}` }}
       >
@@ -182,7 +188,7 @@ function HeroDetails() {
       </div>
 
       {/* Services */}
-      <ul className="absolute" style={{ right: k(30), top: y(385), width: k(200) }}>
+      <ul data-reveal="up-sm" data-hero="5" className="absolute" style={{ right: k(30), top: y(385), width: k(200) }}>
         {SERVICES.map((service, i) => (
           <li
             key={service}

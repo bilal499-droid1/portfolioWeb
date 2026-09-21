@@ -11,7 +11,7 @@ const LINKS = [
 
 function ContactCell({ label, value, href, mark }) {
   return (
-    <div className="relative overflow-hidden px-[2rem] pt-[clamp(2.5rem,6.6vw,6rem)] pb-[clamp(3rem,7vw,6.5rem)] text-right">
+    <div data-reveal="up" className="relative overflow-hidden px-[2rem] pt-[clamp(2.5rem,6.6vw,6rem)] pb-[clamp(3rem,7vw,6.5rem)] text-right">
       <span
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-[0.3em] left-[1.5rem] font-sans text-[clamp(3rem,9.5vw,8rem)] leading-none font-extrabold tracking-[0.02em] whitespace-nowrap select-none"
@@ -45,7 +45,7 @@ function Footer() {
       />
 
       {/* Developed-by line above the contact row */}
-      <div className="relative px-[clamp(1.5rem,4vw,3.5rem)] pt-[clamp(2rem,4.5vw,4rem)] pb-[clamp(1.25rem,2.4vw,2rem)] text-right">
+      <div data-reveal="fade" className="relative px-[clamp(1.5rem,4vw,3.5rem)] pt-[clamp(2rem,4.5vw,4rem)] pb-[clamp(1.25rem,2.4vw,2rem)] text-right">
         <p className="text-[0.8125rem] text-white/28">
           Developed by <span className="text-[#b8453d]">Bilal</span>
         </p>
@@ -63,7 +63,7 @@ function Footer() {
       </div>
 
       {/* Oversized sign-off, bleeding to both edges */}
-      <div className="relative flex justify-center overflow-hidden pt-[clamp(1.5rem,3vw,2.5rem)]">
+      <div data-reveal="fade-slow" className="relative flex justify-center overflow-hidden pt-[clamp(1.5rem,3vw,2.5rem)]">
         <span
           aria-hidden="true"
           className="bg-clip-text font-sans text-[18vw] leading-[0.82] font-extrabold tracking-[0.085em] whitespace-nowrap text-transparent select-none"
@@ -73,7 +73,7 @@ function Footer() {
         </span>
       </div>
 
-      <div className="relative mx-auto max-w-[59rem] px-[clamp(1rem,2vw,1.5rem)]">
+      <div data-reveal="fade" className="relative mx-auto max-w-[59rem] px-[clamp(1rem,2vw,1.5rem)]">
         <div className="flex flex-col items-center gap-[0.9rem] border-t border-white/[0.07] py-[1.5rem] text-[0.75rem] sm:flex-row sm:justify-between">
           <p className="text-white/45">© 2026 Talha Mushtaq. All rights reserved.</p>
 

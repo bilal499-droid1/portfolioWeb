@@ -53,7 +53,7 @@ function Header() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="relative z-20 px-5 sm:px-8 lg:px-12">
+    <header data-reveal="down" data-hero="0" className="relative z-20 px-5 sm:px-8 lg:px-12">
       <div className="flex h-24 items-center justify-between border-b border-white/5 pt-2">
         {/* Equal flex-1 sides keep the nav centred; the logo and actions hug it from either side. */}
         <div className="flex flex-1 lg:justify-end">
