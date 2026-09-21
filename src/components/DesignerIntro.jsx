@@ -2,8 +2,8 @@ import suv1 from '../assets/suv1.png'
 import HalftoneField from './HalftoneField'
 
 // Third screen, measured from kopster.png (an 815px-wide mock-up). Sits directly
-// below AboutIntro: the red bloom along its top edge picks up where that
-// section's glow leaves off.
+// below AboutIntro, and its top edge fades up from the flat colour that section
+// ends on, so the join between them doesn't show.
 const STATS = [
   { value: '08+', label: 'Years Crafting' },
   { value: '30+', label: 'Digital Products' },
@@ -30,7 +30,7 @@ function CodeIcon() {
 
 function DesignerIntro() {
   return (
-    <section id="designer" className="relative isolate min-h-svh overflow-hidden bg-[#0a0202] font-jost text-white">
+    <section id="designer" className="relative isolate -mt-px min-h-svh overflow-hidden bg-[#0a0202] font-jost text-white">
       {/* Red bloom: strongest along the top edge, with a second pool behind the card. */}
       <div
         aria-hidden="true"
@@ -53,6 +53,13 @@ function DesignerIntro() {
         }}
       />
       <HalftoneField />
+
+      {/* Melts the section's top edge into the flat #120203 that AboutIntro ends on, so
+          the two read as one page; the bloom and dots fade in beneath it. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-b from-[#120203] to-transparent"
+      />
 
       {/* Hairline closing the section. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[1.8%] h-px bg-white/[0.055]" />

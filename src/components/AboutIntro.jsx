@@ -22,13 +22,15 @@ function AboutIntro() {
       className="relative overflow-hidden bg-[#0b0101] font-inter"
       style={{ '--u': 'min(calc(100vw / 762), 2.2px)', paddingTop: `calc(11.5vw + ${u(50)})`, paddingBottom: u(248) }}
     >
-      {/* Red glow low in the section, then the faint dot grid over everything. */}
+      {/* Red glow low in the section, then the faint dot grid over everything. The glow
+          is exactly spent at the bottom edge (76% + 24% = 100%), and the dots fade out
+          there, so the last row is the flat #120203 that DesignerIntro fades up from. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(120% 26% at 50% 76%, #860606 0%, rgba(110,5,5,0.8) 45%, transparent 100%), linear-gradient(180deg, #0b0101 0%, #0f0202 55%, #120203 100%)',
+            'radial-gradient(120% 24% at 50% 76%, #860606 0%, rgba(110,5,5,0.8) 45%, transparent 100%), linear-gradient(180deg, #0b0101 0%, #0f0202 55%, #120203 100%)',
         }}
       />
       <div
@@ -37,6 +39,8 @@ function AboutIntro() {
         style={{
           backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1.4px)',
           backgroundSize: `${u(19)} ${u(19)}`,
+          maskImage: 'linear-gradient(180deg, #000 75%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(180deg, #000 75%, transparent 100%)',
         }}
       />
       <HalftoneField spacing={aboutGridPitch} color="255,255,255" peakAlpha={0.3} />
