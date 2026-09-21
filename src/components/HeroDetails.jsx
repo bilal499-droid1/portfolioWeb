@@ -15,8 +15,15 @@ const INFO = [
 
 const SERVICES = ['User-Centered Design', 'Pixel-perfect Interfaces', 'Responsive Design', 'Prototyping']
 
+// The two cards are kept compact so the poster stays the focus. Everything inside
+// them is sized through c(), which is k() shrunk by CARD_SCALE; ct() also keeps
+// small text from dropping below a readable pixel size on narrow screens.
+const CARD_SCALE = 0.78
+const c = (n) => k(+(n * CARD_SCALE).toFixed(2))
+const ct = (n, minPx) => `max(${minPx}px, ${c(n)})`
+
 const cardStyle = {
-  borderRadius: k(12),
+  borderRadius: k(10),
   background:
     'radial-gradient(120% 70% at 60% 100%, rgba(120,4,4,0.9), transparent 70%), linear-gradient(180deg, #120303, #2a0404)',
 }
@@ -64,25 +71,27 @@ function HeroDetails() {
         <div className="relative" style={{ marginLeft: k(40) }}>
           <dl
             className="border border-white/15 font-roboto"
-            style={{ ...cardStyle, width: k(255), padding: `${k(16)} ${k(16)} ${k(22)}` }}
+            style={{ ...cardStyle, width: k(200), padding: `${c(16)} ${c(16)} ${c(22)}` }}
           >
             {INFO.map(({ label, value }, i) => (
-              <div key={label} style={{ marginTop: i ? k(12) : 0 }}>
-                <dt className="font-medium text-[#b33333]" style={{ fontSize: k(12.5) }}>
+              <div key={label} style={{ marginTop: i ? c(12) : 0 }}>
+                <dt className="font-medium text-[#b33333]" style={{ fontSize: ct(12.5, 10) }}>
                   {label}
                 </dt>
-                <dd className="text-[#b06262]" style={{ fontSize: k(10.5), marginTop: k(3) }}>
+                <dd className="text-[#b06262]" style={{ fontSize: ct(10.5, 9), marginTop: c(3) }}>
                   {value}
                 </dd>
               </div>
             ))}
           </dl>
+          {/* Anchored to the card's bottom edge and stretched to cover the width the card
+              gave up, so the dot still lands on the same spot of the poster. */}
           <Connector
-            position={{ left: '100%', top: k(104) }}
-            width={80}
+            position={{ left: '100%', bottom: k(20.5) }}
+            width={135}
             height={50}
-            points="0,12 36,12 62,36"
-            dot={[68, 39]}
+            points="0,12 91,12 117,36"
+            dot={[123, 39]}
           />
         </div>
 
@@ -117,22 +126,22 @@ function HeroDetails() {
       {/* About / CV card */}
       <div
         className="pointer-events-auto absolute border border-white/15 font-roboto"
-        style={{ ...cardStyle, right: k(70), top: y(178), width: k(240), padding: `${k(22)} ${k(15)} ${k(10)}` }}
+        style={{ ...cardStyle, right: k(70), top: y(178), width: k(180), padding: `${c(22)} ${c(15)} ${c(10)}` }}
       >
-        <p className="text-center text-[#8a2e2e]" style={{ fontSize: k(8.5) }}>
+        <p className="text-center text-[#8a2e2e]" style={{ fontSize: ct(8.5, 9) }}>
           A little something about me
         </p>
         <a
           href="#"
           className="flex items-center justify-center border border-[#5a1818] bg-linear-to-b from-[#3a0808] to-[#1c0202] font-medium text-[#df6464] transition-colors hover:border-[#8a2a2a] hover:text-[#f08080]"
-          style={{ height: k(44), borderRadius: k(7), marginTop: k(12), gap: k(7), fontSize: k(11) }}
+          style={{ height: c(44), borderRadius: c(7), marginTop: c(12), gap: c(7), fontSize: ct(11, 10) }}
         >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ width: k(11), height: k(11) }}>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ width: ct(11, 10), height: ct(11, 10) }}>
             <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5L13 3.5ZM8 12v1.6h8V12H8Zm0 3.5v1.6h8v-1.6H8Z" />
           </svg>
           Download CV
         </a>
-        <div className="flex justify-end" style={{ gap: k(8), marginTop: k(12) }}>
+        <div className="flex justify-end" style={{ gap: c(8), marginTop: c(12) }}>
           {[
             { label: 'LinkedIn', text: 'in' },
             { label: 'Behance', text: 'Bē' },
@@ -142,17 +151,18 @@ function HeroDetails() {
               href="#"
               aria-label={label}
               className="grid place-items-center rounded-full bg-[#3a1010] font-bold text-[#9a5a5a] transition-colors hover:text-[#e08a8a]"
-              style={{ width: k(23), height: k(23), fontSize: k(10) }}
+              style={{ width: ct(23, 20), height: ct(23, 20), fontSize: ct(10, 9) }}
             >
               {text}
             </a>
           ))}
         </div>
+        {/* Widened by the 60 the card lost, so the dot stays where it was. */}
         <Connector
           position={{ right: `calc(100% - ${k(15)})`, top: `calc(100% - ${k(4)})` }}
-          width={70}
+          width={130}
           height={70}
-          points="15,59 55,30 55,4"
+          points="15,59 86,59 115,30 115,4"
           dot={[15, 59]}
         />
       </div>
