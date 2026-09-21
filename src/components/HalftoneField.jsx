@@ -1,23 +1,26 @@
 import { useEffect, useRef } from 'react'
 
-// An interactive halftone layer for a section's background. The sections already
-// paint a static dot grid in CSS; this canvas sits directly on top of it, on the
-// same grid, and swells the dots around the cursor: they grow, brighten and
-// shimmer, then settle back slowly so the pointer leaves a soft comet trail. Away
-// from the cursor nothing is drawn, so the existing pattern stays calm. Pass
-// `baseAlpha` for a section with no CSS grid of its own (the hero) to have the
-// canvas draw the resting dots too.
+// An interactive halftone dot field for a section's background, drawn on a canvas
+// that sits below the section's content. The cursor acts like a small mass: dots
+// within its reach are drawn toward it, on springs, so they lean in, overshoot a
+// little and swing back once it moves on. Near the cursor they also grow, brighten
+// and shimmer, and settle slowly enough to leave a soft trail. Far from the cursor
+// the grid is perfectly still.
 //
-// It is a plain background layer: pointer-events are off, it sits below the
-// section's content, and it never stops or consumes an event. Only the part of the
-// section near the viewport is backed by pixels, and only while that part is on
-// screen. Reduced motion keeps the resting dots and drops the reaction.
+// The field draws the whole grid itself (`baseAlpha` is the resting dot opacity),
+// because a dot that moves can't share its spot with a static one. It ignores the
+// pointer for hit-testing (pointer-events are off), never stops or consumes an
+// event, and only backs the part of the section near the viewport with pixels, and
+// only while that part is on screen. Reduced motion keeps the still grid and drops
+// the reaction.
 
-const MAX_DPR = 1.5 // the dots are tiny and soft; more pixels buy nothing
+const MAX_DPR = 2
 const TAU = Math.PI * 2
-const PEAK_RISE = 0.07 // s: how fast a dot swells once the cursor reaches it
+const PEAK_RISE = 0.07 // s: how fast a dot brightens once the cursor reaches it
 const SETTLE = 0.5 // s: how slowly it relaxes after the cursor leaves
-const CURSOR_LAG = 0.05 // s: the cursor's influence eases toward the real pointer
+const CURSOR_LAG = 0.05 // s: the cursor's pull eases toward the real pointer
+const STIFFNESS = 90 // spring pulling a dot toward where the cursor wants it
+const DAMPING = 11 // enough friction to swing back with one soft overshoot
 
 // One pointer listener shared by every field on the page.
 const pointer = { x: 0, y: 0, inside: false }
@@ -60,9 +63,10 @@ function subscribe(fn) {
 }
 
 // `spacing` is the grid pitch in px, or a function of the viewport width for
-// grids that scale with it. `color` is an 'r,g,b' string; `peakAlpha` is how
-// opaque a dot gets right under the cursor.
-function HalftoneField({ spacing = 21, color = '255,96,86', peakAlpha = 0.5, baseAlpha = 0 }) {
+// grids that scale with it. `color` is an 'r,g,b' string. `baseAlpha` is a resting
+// dot's opacity and `peakAlpha` how opaque a dot gets right under the cursor.
+// `fadeBottom` fades the grid out over the last quarter of the section.
+function HalftoneField({ spacing = 21, color = '255,96,86', peakAlpha = 0.5, baseAlpha = 0.15, fadeBottom = false }) {
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
 
@@ -73,11 +77,19 @@ function HalftoneField({ spacing = 21, color = '255,96,86', peakAlpha = 0.5, bas
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     let pitch = 21
-    let reach = 140 // px: how far from the cursor a dot still reacts
-    let maxRadius = 3.5
+    let reach = 140 // px: how far from the cursor a dot still feels it
+    let pullMax = 40 // px: the furthest a dot is drawn toward the cursor
+    let soften = 30 // px: inside this the pull fades, so dots don't pile onto the cursor
+    let maxRadius = 3
     let cols = 0
     let rows = 0
-    let energy = new Float32Array(0) // per dot, 0 (resting) to 1 (under the cursor)
+    // Per dot: how awake it is (0 resting, 1 under the cursor), and its spring
+    // state, an offset from home and the velocity of that offset.
+    let energy = new Float32Array(0)
+    let offX = new Float32Array(0)
+    let offY = new Float32Array(0)
+    let velX = new Float32Array(0)
+    let velY = new Float32Array(0)
     let dpr = 1
     let sectionH = 0
     let cssW = 0
@@ -96,12 +108,19 @@ function HalftoneField({ spacing = 21, color = '255,96,86', peakAlpha = 0.5, bas
       needsLayout = false
       pitch = typeof spacing === 'function' ? spacing(window.innerWidth) : spacing
       reach = Math.min(pitch * 6.5, 200, window.innerWidth * 0.35)
-      maxRadius = Math.min(pitch * 0.17, 4.5)
+      pullMax = Math.min(pitch * 2, reach * 0.3)
+      soften = pitch * 1.4
+      maxRadius = Math.min(pitch * 0.12, 3.2)
       const width = section.offsetWidth
       sectionH = section.offsetHeight
       cols = Math.ceil(width / pitch)
       rows = Math.ceil(sectionH / pitch)
-      energy = new Float32Array(cols * rows)
+      const dots = cols * rows
+      energy = new Float32Array(dots)
+      offX = new Float32Array(dots)
+      offY = new Float32Array(dots)
+      velX = new Float32Array(dots)
+      velY = new Float32Array(dots)
       dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR)
       // A screen and a half of height, so scrolling can ride the page's own
       // motion for a while before the canvas has to be moved.
@@ -115,8 +134,7 @@ function HalftoneField({ spacing = 21, color = '255,96,86', peakAlpha = 0.5, bas
     }
 
     // Keeps the canvas parked while the viewport stays well inside it, so its
-    // dots scroll in step with the CSS grid, and re-centres it when the viewport
-    // nears an edge.
+    // dots scroll with the page, and re-centres it when the viewport nears an edge.
     const anchor = (rect) => {
       const top = -rect.top
       const bottom = top + window.innerHeight
@@ -163,62 +181,80 @@ function HalftoneField({ spacing = 21, color = '255,96,86', peakAlpha = 0.5, bas
 
       const j0 = Math.max(0, Math.floor(oy / pitch) - 1)
       const j1 = Math.min(rows - 1, Math.ceil((oy + cssH) / pitch))
-
-      if (baseAlpha) {
-        ctx.globalAlpha = baseAlpha
-        ctx.beginPath()
-        for (let j = j0; j <= j1; j++) {
-          const cy = (j + 0.5) * pitch - oy
-          for (let i = 0; i < cols; i++) {
-            const cx = (i + 0.5) * pitch
-            ctx.moveTo(cx + 1, cy)
-            ctx.arc(cx, cy, 1, 0, TAU)
-          }
-        }
-        ctx.fill()
-      }
-
+      const rise = 1 - Math.exp(-dt / PEAK_RISE)
+      const fall = 1 - Math.exp(-dt / SETTLE)
+      const reach2 = reach * reach
+      const shimmer = now * 0.0016
+      const resting = new Path2D() // every dot the cursor isn't touching, filled in one go
       let settling = false
-      if (!reduced) {
-        const rise = 1 - Math.exp(-dt / PEAK_RISE)
-        const fall = 1 - Math.exp(-dt / SETTLE)
-        const reach2 = reach * reach
-        const shimmer = now * 0.0016
-        for (let j = j0; j <= j1; j++) {
-          const cy = (j + 0.5) * pitch - oy
-          const dy = cy - py
-          const rowNear = tracking && Math.abs(dy) < reach
-          for (let i = 0; i < cols; i++) {
-            const idx = j * cols + i
-            let e = energy[idx]
-            let target = 0
-            const cx = (i + 0.5) * pitch
-            if (rowNear) {
-              const dx = cx - px
-              const d2 = dx * dx + dy * dy
-              if (d2 < reach2) {
-                const t = 1 - Math.sqrt(d2) / reach
-                target = t * t * (3 - 2 * t) // smoothstep: soft edge, full strength at the cursor
-              }
-            }
-            e += (target - e) * (target > e ? rise : fall)
-            if (e < 0.004) {
-              energy[idx] = 0
-              continue
-            }
-            energy[idx] = e
-            settling = true
 
-            // Each dot shimmers a little out of step with its neighbours, in
-            // proportion to how awake it is.
-            const wobble = 1 + 0.14 * e * Math.sin(shimmer + i * 0.9 + j * 1.7)
-            ctx.globalAlpha = Math.min(1, peakAlpha * e)
-            ctx.beginPath()
-            ctx.arc(cx, cy, (1 + e * (maxRadius - 1)) * wobble, 0, TAU)
-            ctx.fill()
+      for (let j = j0; j <= j1; j++) {
+        const cy = (j + 0.5) * pitch - oy
+        const rowNear = tracking && Math.abs(py - cy) < reach
+        for (let i = 0; i < cols; i++) {
+          const cx = (i + 0.5) * pitch
+          const idx = j * cols + i
+          let e = energy[idx]
+          let x = offX[idx]
+          let y = offY[idx]
+          let vx = velX[idx]
+          let vy = velY[idx]
+
+          // Where the cursor would like this dot to be, and how strongly it is felt.
+          let target = 0
+          let tx = 0
+          let ty = 0
+          if (rowNear) {
+            const dx = px - cx
+            const dy = py - cy
+            const d2 = dx * dx + dy * dy
+            if (d2 < reach2 && d2 > 0.25) {
+              const d = Math.sqrt(d2)
+              const t = 1 - d / reach
+              target = t * t * (3 - 2 * t) // smoothstep: soft edge, full strength at the cursor
+              // Pulled toward the cursor, softened close in and never past halfway.
+              const pull = Math.min(pullMax * target * (d / (d + soften)) * 1.6, d * 0.5)
+              tx = (dx / d) * pull
+              ty = (dy / d) * pull
+            }
           }
+
+          e += (target - e) * (target > e ? rise : fall)
+          vx += ((tx - x) * STIFFNESS - vx * DAMPING) * dt
+          vy += ((ty - y) * STIFFNESS - vy * DAMPING) * dt
+          x += vx * dt
+          y += vy * dt
+
+          const moving = Math.abs(x) + Math.abs(y) > 0.03 || Math.abs(vx) + Math.abs(vy) > 0.3
+          if (e < 0.004 && !moving) {
+            energy[idx] = 0
+            offX[idx] = 0
+            offY[idx] = 0
+            velX[idx] = 0
+            velY[idx] = 0
+            resting.moveTo(cx + 1, cy)
+            resting.arc(cx, cy, 1, 0, TAU)
+            continue
+          }
+          energy[idx] = e
+          offX[idx] = x
+          offY[idx] = y
+          velX[idx] = vx
+          velY[idx] = vy
+          settling = true
+
+          // Each dot shimmers a little out of step with its neighbours, in
+          // proportion to how awake it is.
+          const wobble = 1 + 0.14 * e * Math.sin(shimmer + i * 0.9 + j * 1.7)
+          ctx.globalAlpha = Math.min(1, baseAlpha + (peakAlpha - baseAlpha) * e)
+          ctx.beginPath()
+          ctx.arc(cx + x, cy + y, (1 + e * (maxRadius - 1)) * wobble, 0, TAU)
+          ctx.fill()
         }
       }
+
+      ctx.globalAlpha = baseAlpha
+      ctx.fill(resting)
       ctx.globalAlpha = 1
 
       // A cursor parked over some other section leaves this one idle; moving it
@@ -274,8 +310,14 @@ function HalftoneField({ spacing = 21, color = '255,96,86', peakAlpha = 0.5, bas
     }
   }, [spacing, color, peakAlpha, baseAlpha])
 
+  const fade = fadeBottom ? 'linear-gradient(180deg, #000 75%, transparent 100%)' : undefined
   return (
-    <div ref={wrapRef} aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      ref={wrapRef}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      style={{ maskImage: fade, WebkitMaskImage: fade }}
+    >
       <canvas ref={canvasRef} className="absolute top-0 left-0" />
     </div>
   )

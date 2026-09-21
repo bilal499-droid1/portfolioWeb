@@ -86,15 +86,7 @@ function WorkList() {
         }}
       />
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,96,86,0.16) 1px, transparent 1px)',
-          backgroundSize: '21px 21px',
-        }}
-      />
-      <HalftoneField />
+      <HalftoneField baseAlpha={0.16} />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(4rem,8vw,7rem)] pb-[clamp(4rem,8vw,7rem)] lg:pr-[24vw]">
         <h2 className="mb-[clamp(3rem,7vw,6.5rem)] text-center text-[clamp(2.25rem,5vw,4.5rem)] leading-none font-bold tracking-[-0.02em] text-white lg:-mr-[16vw]">

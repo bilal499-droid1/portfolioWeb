@@ -67,15 +67,7 @@ function Skills() {
         }}
       />
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,96,86,0.16) 1px, transparent 1px)',
-          backgroundSize: '21px 21px',
-        }}
-      />
-      <HalftoneField />
+      <HalftoneField baseAlpha={0.16} />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,9vw,8rem)]">
         <h2

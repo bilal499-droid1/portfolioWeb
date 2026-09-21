@@ -194,15 +194,7 @@ function Trajectory() {
           ].join(','),
         }}
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,96,86,0.14) 1px, transparent 1px)',
-          backgroundSize: '21px 21px',
-        }}
-      />
-      <HalftoneField />
+      <HalftoneField baseAlpha={0.14} />
 
       <div className="relative mx-auto max-w-[56rem] px-[6vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,8vw,7rem)]">
         <p className="flex justify-center">

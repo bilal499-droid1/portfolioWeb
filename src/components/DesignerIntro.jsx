@@ -44,15 +44,7 @@ function DesignerIntro() {
         }}
       />
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,96,86,0.20) 1px, transparent 1px)',
-          backgroundSize: '21px 21px',
-        }}
-      />
-      <HalftoneField />
+      <HalftoneField baseAlpha={0.2} />
 
       {/* Melts the section's top edge into the flat #120203 that AboutIntro ends on, so
           the two read as one page; the bloom and dots fade in beneath it. */}
