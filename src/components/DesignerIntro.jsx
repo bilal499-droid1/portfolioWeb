@@ -53,8 +53,12 @@ function DesignerIntro() {
         className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-b from-[#120203] to-transparent"
       />
 
-      {/* Hairline closing the section. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[1.8%] h-px bg-white/[0.055]" />
+      {/* Settles the bloom and dots into flat #0a0202, which WorkList fades up from. This
+          replaces the hairline that used to close the section, since that read as a line. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-t from-[#0a0202] to-transparent"
+      />
 
       <div className="relative mx-auto flex min-h-svh max-w-[1600px] items-center px-[8vw] pt-[4rem] pb-[10rem] lg:pr-[14vw]">
         <div className="grid w-full grid-cols-1 items-center gap-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-[6vw]">

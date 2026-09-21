@@ -183,7 +183,7 @@ function Entry({ entry, index, total }) {
 
 function Trajectory() {
   return (
-    <section id="trajectory" className="relative isolate overflow-hidden bg-[#0a0101] font-jost text-white">
+    <section id="trajectory" className="relative isolate -mt-px overflow-hidden bg-[#0a0101] font-jost text-white">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -195,6 +195,13 @@ function Trajectory() {
         }}
       />
       <HalftoneField baseAlpha={0.14} />
+
+      {/* Melts the top edge into the flat #0a0101 that Skills ends on; the bloom and dots
+          fade in beneath it. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-b from-[#0a0101] to-transparent"
+      />
 
       <div className="relative mx-auto max-w-[56rem] px-[6vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,8vw,7rem)]">
         <p className="flex justify-center">

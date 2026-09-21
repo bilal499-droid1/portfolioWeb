@@ -73,7 +73,7 @@ function ProjectCard({ n, title }) {
 
 function WorkList() {
   return (
-    <section id="work" className="relative isolate overflow-hidden bg-[#0a0101] font-jost text-white">
+    <section id="work" className="relative isolate -mt-px overflow-hidden bg-[#0a0101] font-jost text-white">
       {/* Red pool low in the section, matching the mock-up's bottom glow. */}
       <div
         aria-hidden="true"
@@ -87,6 +87,20 @@ function WorkList() {
       />
 
       <HalftoneField baseAlpha={0.16} />
+
+      {/* Melts the top edge into the flat #0a0202 that DesignerIntro ends on; the glow and
+          dots fade in beneath it. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-b from-[#0a0202] to-transparent"
+      />
+
+      {/* Settles the glow and dots into the flat #0a0101 that Skills fades up from, so
+          the join between the two sections doesn't show. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-t from-[#0a0101] to-transparent"
+      />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(4rem,8vw,7rem)] pb-[clamp(4rem,8vw,7rem)] lg:pr-[24vw]">
         <h2 className="mb-[clamp(3rem,7vw,6.5rem)] text-center text-[clamp(2.25rem,5vw,4.5rem)] leading-none font-bold tracking-[-0.02em] text-white lg:-mr-[16vw]">

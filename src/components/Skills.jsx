@@ -55,7 +55,7 @@ function SkillCard({ title, blurb, tags }) {
 
 function Skills() {
   return (
-    <section id="skills" className="relative isolate overflow-hidden bg-[#0a0101] font-jost text-white">
+    <section id="skills" className="relative isolate -mt-px overflow-hidden bg-[#0a0101] font-jost text-white">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -68,6 +68,18 @@ function Skills() {
       />
 
       <HalftoneField baseAlpha={0.16} />
+
+      {/* Melts the top edge into the flat #0a0101 that WorkList ends on; the bloom and
+          dots fade in beneath it. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-b from-[#0a0101] to-transparent"
+      />
+      {/* And the same at the bottom, settling into the flat colour Trajectory fades up from. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[clamp(6rem,14vw,13rem)] bg-linear-to-t from-[#0a0101] to-transparent"
+      />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,9vw,8rem)]">
         <h2
