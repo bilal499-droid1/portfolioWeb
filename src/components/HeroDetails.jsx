@@ -22,6 +22,15 @@ const CARD_SCALE = 0.78
 const c = (n) => k(+(n * CARD_SCALE).toFixed(2))
 const ct = (n, minPx) => `max(${minPx}px, ${c(n)})`
 
+// The cards hug the face instead of the screen edges. The poster is centred and
+// sized from the viewport height (its own width is --pw), and the face spans
+// roughly 24% left and 31% right of its centre, so measuring from there keeps the
+// cards the same distance from the face at any window shape.
+const INFO_WIDTH = 200
+const CV_WIDTH = 180
+const FACE_GAP = 14
+const faceRight = `calc(50% + 0.31 * var(--pw) + ${k(FACE_GAP)})`
+
 const cardStyle = {
   borderRadius: k(10),
   background:
@@ -49,7 +58,10 @@ function HeroDetails() {
   return (
     <div
       className="pointer-events-none absolute inset-x-0 top-24 bottom-[1.7vw] z-[5] hidden select-none lg:block"
-      style={{ '--k': `min(calc(100vw / 910), calc((100svh - 6rem - 1.7vw) / ${SAMPLE_HEIGHT}))` }}
+      style={{
+        '--k': `min(calc(100vw / 910), calc((100svh - 6rem - 1.7vw) / ${SAMPLE_HEIGHT}))`,
+        '--pw': 'min(calc((100svh - 6rem) * 1.1053), 100vw)',
+      }}
     >
       {/* Title + intro */}
       <div className="absolute" style={{ left: k(38), top: y(100), width: k(215) }}>
@@ -66,12 +78,16 @@ function HeroDetails() {
         </p>
       </div>
 
-      {/* Info card with the tagline 40px below it, stacked up from the ribbon. */}
-      <div className="absolute flex flex-col items-start gap-10" style={{ left: k(35), bottom: k(8) }}>
-        <div className="relative" style={{ marginLeft: k(40) }}>
+      {/* Info card with the tagline 40px below it, stacked up from the ribbon. The
+          column spans the full width so the card's margin can be measured from the centre. */}
+      <div className="absolute inset-x-0 flex flex-col items-start gap-10" style={{ bottom: k(8) }}>
+        <div
+          className="relative"
+          style={{ marginLeft: `calc(50% - 0.24 * var(--pw) - ${k(FACE_GAP + INFO_WIDTH)})` }}
+        >
           <dl
             className="border border-white/15 font-roboto"
-            style={{ ...cardStyle, width: k(200), padding: `${c(16)} ${c(16)} ${c(22)}` }}
+            style={{ ...cardStyle, width: k(INFO_WIDTH), padding: `${c(16)} ${c(16)} ${c(22)}` }}
           >
             {INFO.map(({ label, value }, i) => (
               <div key={label} style={{ marginTop: i ? c(12) : 0 }}>
@@ -84,18 +100,17 @@ function HeroDetails() {
               </div>
             ))}
           </dl>
-          {/* Anchored to the card's bottom edge and stretched to cover the width the card
-              gave up, so the dot still lands on the same spot of the poster. */}
+          {/* Anchored to the card's bottom edge so it stays attached if the card's height changes. */}
           <Connector
             position={{ left: '100%', bottom: k(20.5) }}
-            width={135}
+            width={109}
             height={50}
-            points="0,12 91,12 117,36"
-            dot={[123, 39]}
+            points="0,12 65,12 91,36"
+            dot={[97, 39]}
           />
         </div>
 
-        <p className="leading-none text-white" style={{ marginLeft: k(3) }}>
+        <p className="leading-none text-white" style={{ marginLeft: k(38) }}>
           <span className="block whitespace-nowrap">
             <span className="font-bebas" style={{ fontSize: k(19) }}>
               CREATING
@@ -126,7 +141,7 @@ function HeroDetails() {
       {/* About / CV card */}
       <div
         className="pointer-events-auto absolute border border-white/15 font-roboto"
-        style={{ ...cardStyle, right: k(70), top: y(178), width: k(180), padding: `${c(22)} ${c(15)} ${c(10)}` }}
+        style={{ ...cardStyle, left: faceRight, top: y(178), width: k(CV_WIDTH), padding: `${c(22)} ${c(15)} ${c(10)}` }}
       >
         <p className="text-center text-[#8a2e2e]" style={{ fontSize: ct(8.5, 9) }}>
           A little something about me
@@ -157,12 +172,11 @@ function HeroDetails() {
             </a>
           ))}
         </div>
-        {/* Widened by the 60 the card lost, so the dot stays where it was. */}
         <Connector
           position={{ right: `calc(100% - ${k(15)})`, top: `calc(100% - ${k(4)})` }}
-          width={130}
+          width={107}
           height={70}
-          points="15,59 86,59 115,30 115,4"
+          points="15,59 63,59 92,30 92,4"
           dot={[15, 59]}
         />
       </div>
