@@ -1,3 +1,5 @@
+import HalftoneField from './HalftoneField'
+
 // Fourth screen ("My Work"), measured from suv2.png (a 635px-wide mock-up).
 // The mock-up shows its three cards in three different states — dim, mid, and
 // fully red — which reads as one frame of a hover/scroll reveal rather than
@@ -92,6 +94,7 @@ function WorkList() {
           backgroundSize: '21px 21px',
         }}
       />
+      <HalftoneField />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(4rem,8vw,7rem)] pb-[clamp(4rem,8vw,7rem)] lg:pr-[24vw]">
         <h2 className="mb-[clamp(3rem,7vw,6.5rem)] text-center text-[clamp(2.25rem,5vw,4.5rem)] leading-none font-bold tracking-[-0.02em] text-white lg:-mr-[16vw]">

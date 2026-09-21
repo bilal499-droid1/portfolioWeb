@@ -1,3 +1,5 @@
+import HalftoneField from './HalftoneField'
+
 // Sixth screen ("Trajectory"), measured from suv5.png (a 510px-wide mock-up).
 //
 // ⚠ COPY IS PLACEHOLDER. suv5.png is 510px wide for a full page, which puts the
@@ -200,6 +202,7 @@ function Trajectory() {
           backgroundSize: '21px 21px',
         }}
       />
+      <HalftoneField />
 
       <div className="relative mx-auto max-w-[56rem] px-[6vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,8vw,7rem)]">
         <p className="flex justify-center">

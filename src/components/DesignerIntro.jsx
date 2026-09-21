@@ -1,4 +1,5 @@
 import suv1 from '../assets/suv1.png'
+import HalftoneField from './HalftoneField'
 
 // Third screen, measured from kopster.png (an 815px-wide mock-up). Sits directly
 // below AboutIntro: the red bloom along its top edge picks up where that
@@ -51,6 +52,7 @@ function DesignerIntro() {
           backgroundSize: '21px 21px',
         }}
       />
+      <HalftoneField />
 
       {/* Hairline closing the section. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[1.8%] h-px bg-white/[0.055]" />

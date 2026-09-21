@@ -1,10 +1,14 @@
 import glassHi from '../assets/glass-hi.webp'
+import HalftoneField from './HalftoneField'
 import LiquidGlass from './LiquidGlass'
 
 // Second screen ("About me"), measured from sample2 (a 762px-wide mock-up).
 // --u is one sample pixel, scaled to the viewport width and capped on very wide
 // screens so the name doesn't become enormous.
 const u = (n) => `calc(${n} * var(--u))`
+
+// The dot grid below is 19u across, so the halftone field has to follow the same scale.
+const aboutGridPitch = (viewportWidth) => 19 * Math.min(viewportWidth / 762, 2.2)
 
 const ROLES = ['UI/UX Designer', 'Web Engineering', 'Video Post Production']
 
@@ -35,6 +39,7 @@ function AboutIntro() {
           backgroundSize: `${u(19)} ${u(19)}`,
         }}
       />
+      <HalftoneField spacing={aboutGridPitch} color="255,255,255" peakAlpha={0.3} />
 
       <div className="relative flex flex-col items-center px-4">
         <span

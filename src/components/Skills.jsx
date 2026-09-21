@@ -1,3 +1,5 @@
+import HalftoneField from './HalftoneField'
+
 // Fifth screen ("Skills"), measured from suv4.png (a 506px-wide mock-up).
 // The mock-up shows a single card centred under a large outlined SKILLS
 // wordmark; SKILLS is driven by the array below, so more cards flow into the
@@ -73,6 +75,7 @@ function Skills() {
           backgroundSize: '21px 21px',
         }}
       />
+      <HalftoneField />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,9vw,8rem)]">
         <h2
