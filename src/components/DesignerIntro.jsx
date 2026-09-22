@@ -1,5 +1,6 @@
 import suv1 from '../assets/suv1.png'
 import HalftoneField from './HalftoneField'
+import { PixelGravityImage, PixelTilt } from './PixelTilt'
 
 // Third screen, measured from kopster.png (an 815px-wide mock-up). Sits directly
 // below AboutIntro, and its top edge fades up from the flat colour that section
@@ -120,54 +121,64 @@ function DesignerIntro() {
           </div>
 
           <div data-reveal="right" className="relative w-[clamp(15rem,23.5vw,21.2rem)] justify-self-center lg:justify-self-end">
-            <div
-              className="relative rounded-[13px] border border-white/[0.07] p-[0.7rem]"
-              style={{
-                backgroundImage: 'linear-gradient(150deg, rgba(58,16,14,0.85), rgba(20,6,6,0.9))',
-                boxShadow: '0 40px 90px -30px rgba(0,0,0,0.9)',
-              }}
-            >
-              <div className="relative aspect-[182/225] overflow-hidden rounded-[8px]">
-                <img src={suv1} alt="Chick in a yellow raincoat standing on wet pavement" className="h-full w-full object-cover" />
+            <PixelTilt>
+              <div
+                className="relative rounded-[13px] border border-white/[0.07] p-[0.7rem]"
+                style={{
+                  backgroundImage: 'linear-gradient(150deg, rgba(58,16,14,0.85), rgba(20,6,6,0.9))',
+                  boxShadow: '0 40px 90px -30px rgba(0,0,0,0.9)',
+                }}
+              >
+                <div className="relative aspect-[182/225] overflow-hidden rounded-[8px]">
+                  <PixelGravityImage
+                    src={suv1}
+                    alt="Chick in a yellow raincoat standing on wet pavement"
+                    className="h-full w-full"
+                  />
 
-                <span aria-hidden="true" className="absolute top-0 left-0 size-[13px] border-t border-l border-coral" />
-                <span aria-hidden="true" className="absolute top-0 right-0 size-[13px] border-t border-r border-coral/70" />
-                <span aria-hidden="true" className="absolute bottom-0 left-0 size-[13px] border-b border-l border-coral/70" />
-                <span aria-hidden="true" className="absolute right-0 bottom-0 size-[13px] border-r border-b border-coral" />
+                  <span aria-hidden="true" className="absolute top-0 left-0 size-[13px] border-t border-l border-coral" />
+                  <span aria-hidden="true" className="absolute top-0 right-0 size-[13px] border-t border-r border-coral/70" />
+                  <span aria-hidden="true" className="absolute bottom-0 left-0 size-[13px] border-b border-l border-coral/70" />
+                  <span aria-hidden="true" className="absolute right-0 bottom-0 size-[13px] border-r border-b border-coral" />
 
-                {/* Frosted tech strip */}
-                <div className="absolute inset-x-[0.45rem] bottom-[0.8rem] flex h-[1.2rem] items-center justify-between rounded-[5px] border border-white/15 bg-white/10 px-[0.45rem] backdrop-blur-md">
-                  <span className="flex items-center gap-[0.4rem] text-[0.6rem] font-medium whitespace-nowrap text-white/90">
-                    <span aria-hidden="true" className="size-[4px] rounded-full bg-coral shadow-[0_0_6px_rgba(248,114,107,0.9)]" />
-                    Figma • React • Tailwind
-                  </span>
-                  <span className="text-[0.55rem] tracking-[0.06em] text-white/40">01/03</span>
+                  {/* Frosted tech strip */}
+                  <div className="absolute inset-x-[0.45rem] bottom-[0.8rem] flex h-[1.2rem] items-center justify-between rounded-[5px] border border-white/15 bg-white/10 px-[0.45rem] backdrop-blur-md">
+                    <span className="flex items-center gap-[0.4rem] text-[0.6rem] font-medium whitespace-nowrap text-white/90">
+                      <span aria-hidden="true" className="size-[4px] rounded-full bg-coral shadow-[0_0_6px_rgba(248,114,107,0.9)]" />
+                      Figma • React • Tailwind
+                    </span>
+                    <span className="text-[0.55rem] tracking-[0.06em] text-white/40">01/03</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Location pill, straddling the top edge */}
-            <div className="absolute top-0 -right-[1.35rem] flex -translate-y-1/2 items-center gap-[0.4rem] rounded-full border border-white/[0.09] bg-[#1c1211] px-[0.55rem] py-[0.3rem] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.8)]">
-              <span aria-hidden="true" className="size-[4px] bg-coral" />
-              <span className="text-[0.6rem] tracking-[0.015em] whitespace-nowrap text-white/75">London / Lagos</span>
-            </div>
+              {/* Location pill, straddling the top edge */}
+              <div
+                style={{ transform: 'translateZ(40px)' }}
+                className="absolute top-0 -right-[1.35rem] flex -translate-y-1/2 items-center gap-[0.4rem] rounded-full border border-white/[0.09] bg-[#1c1211] px-[0.55rem] py-[0.3rem] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.8)]">
+                <span aria-hidden="true" className="size-[4px] bg-coral" />
+                <span className="text-[0.6rem] tracking-[0.015em] whitespace-nowrap text-white/75">London / Lagos</span>
+              </div>
 
-            {/* Specialization card, straddling the bottom-left edge */}
-            <div className="absolute -bottom-[1.75rem] -left-[1rem] flex items-center gap-[0.5rem] rounded-[16px] border border-white/[0.07] bg-[#1a0f0e]/85 py-[0.55rem] pr-[0.9rem] pl-[0.5rem] shadow-[0_18px_40px_-16px_rgba(0,0,0,0.9)] backdrop-blur-md">
-              <span
-                aria-hidden="true"
-                className="flex size-[1.55rem] shrink-0 items-center justify-center rounded-[8px] text-[#f5b0aa]"
-                style={{ backgroundImage: 'linear-gradient(145deg, #c9433c, #8c2a26)' }}
-              >
-                <CodeIcon />
-              </span>
-              <span className="block">
-                <span className="block text-[0.5rem] leading-none tracking-[0.16em] text-white/35 uppercase">Specialization</span>
-                <span className="mt-[0.3rem] block text-[0.72rem] leading-none font-medium whitespace-nowrap text-white/90">
-                  Design Systems &amp; Prototyping
+              {/* Specialization card, straddling the bottom-left edge */}
+              <div
+                style={{ transform: 'translateZ(55px)' }}
+                className="absolute -bottom-[1.75rem] -left-[1rem] flex items-center gap-[0.5rem] rounded-[16px] border border-white/[0.07] bg-[#1a0f0e]/85 py-[0.55rem] pr-[0.9rem] pl-[0.5rem] shadow-[0_18px_40px_-16px_rgba(0,0,0,0.9)] backdrop-blur-md">
+                <span
+                  aria-hidden="true"
+                  className="flex size-[1.55rem] shrink-0 items-center justify-center rounded-[8px] text-[#f5b0aa]"
+                  style={{ backgroundImage: 'linear-gradient(145deg, #c9433c, #8c2a26)' }}
+                >
+                  <CodeIcon />
                 </span>
-              </span>
-            </div>
+                <span className="block">
+                  <span className="block text-[0.5rem] leading-none tracking-[0.16em] text-white/35 uppercase">Specialization</span>
+                  <span className="mt-[0.3rem] block text-[0.72rem] leading-none font-medium whitespace-nowrap text-white/90">
+                    Design Systems &amp; Prototyping
+                  </span>
+                </span>
+              </div>
+            </PixelTilt>
           </div>
         </div>
       </div>
