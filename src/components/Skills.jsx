@@ -163,12 +163,17 @@ function useSkillSequence(on, refs) {
       // Far enough to clear the bottom of the screen before the first card appears.
       // Divided by the fit scale because the wrapper shrinks this offset too.
       rise = (stageH * 0.62 + rowH / 2) / scale
+      // offsetLeft/Top are measured from the nearest positioned ancestor, which here
+      // is the stage wrapper rather than the row, so the row's own offset has to come
+      // back out before these read as positions within the row.
+      const baseX = rowEl.offsetLeft
+      const baseY = rowEl.offsetTop
       slots = cards.current.map((el) => {
         if (!el) return { dx: 0, dy: 0 }
         // The offset that would stack this card in the middle of the row.
         return {
-          dx: (rowW - el.offsetWidth) / 2 - el.offsetLeft,
-          dy: (rowH - el.offsetHeight) / 2 - el.offsetTop,
+          dx: (rowW - el.offsetWidth) / 2 - (el.offsetLeft - baseX),
+          dy: (rowH - el.offsetHeight) / 2 - (el.offsetTop - baseY),
         }
       })
     }
@@ -197,10 +202,12 @@ function useSkillSequence(on, refs) {
         // The ones still stacked sit a little back, so the row has some depth.
         const s = 0.93 + 0.07 * out
         el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${s.toFixed(4)})`
-        el.style.opacity = i === 0 ? up.toFixed(3) : '1'
-        // The first card leads the colour; the rest turn as they clear the stack.
+        // The whole stack fades up together. Fading only the front card would let the
+        // ones behind it show through while it was still part-way transparent.
+        el.style.opacity = up.toFixed(3)
+        // Each card turns red as it clears the stack, and black again on the way back.
         const red = reds.current[i]
-        if (red) red.style.opacity = (i === 0 ? phase(p, FAN_START, FAN_SPAN) : out).toFixed(3)
+        if (red) red.style.opacity = out.toFixed(3)
       }
     }
 
