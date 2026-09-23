@@ -298,7 +298,11 @@ function Skills() {
       key={s.title.join(' ')}
       {...s}
       pinned={pinned}
-      depth={SKILLS.length - i}
+      // Stacked, the cards with furthest to travel sit on top, so both ends of the row
+      // clear the stack as soon as they start moving. Ordering these straight across
+      // instead buries the right-hand end under everything and it reads as arriving
+      // late, however exactly its timing matches the left.
+      depth={Math.round(Math.abs(i - (SKILLS.length - 1) / 2) * 2) + 1}
       cardRef={(el) => {
         cards.current[i] = el
       }}
