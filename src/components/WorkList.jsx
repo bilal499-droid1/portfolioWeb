@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import HalftoneField from './HalftoneField'
 
 // Fourth screen ("My Work"), measured from suv2.png (a 635px-wide mock-up).
@@ -17,6 +18,68 @@ const BLURB =
 
 const ROLE = 'UI / UX Designer and Frontend Developer'
 const TAGS = ['Javascript', 'Figma', 'React', 'Tailwind']
+
+// The stack anchor, and how far each card's top sits below the one it covers, so the
+// deck shows its edges instead of one card hiding the rest completely.
+const STACK_TOP = '5.5rem'
+const PEEK = 14 // px per card
+const DIP = 0.075 // how far a covered card shrinks
+const VEIL = 0.55 // how far it dims
+
+// Stacking wants room to read, and a pointer, and a card shorter than the screen.
+const STACKABLE = '(min-width: 768px) and (prefers-reduced-motion: no-preference)'
+
+const clamp01 = (n) => (n < 0 ? 0 : n > 1 ? 1 : n)
+const smoothstep = (t) => t * t * (3 - 2 * t)
+
+// Shrinks and dims each pinned card by how far the next one has come over it. The
+// reading is live geometry rather than a scroll offset, so it needs no measuring
+// pass and survives the cards changing height as text reflows.
+function useCardStack(on, wraps, inners, veils) {
+  useEffect(() => {
+    if (!on) return
+    let raf = 0
+
+    const paint = () => {
+      raf = 0
+      const list = wraps.current
+      for (let i = 0; i < list.length; i++) {
+        const el = list[i]
+        const inner = inners.current[i]
+        if (!el || !inner) continue
+        const next = list[i + 1]
+        let p = 0
+        if (next) {
+          const a = el.getBoundingClientRect()
+          const b = next.getBoundingClientRect()
+          // 0 while the next card is still a full card-height below, 1 once it has
+          // come right over this one.
+          if (a.height > 0) p = clamp01(1 - (b.top - a.top) / a.height)
+        }
+        const e = smoothstep(p)
+        inner.style.transform = `scale(${(1 - DIP * e).toFixed(4)})`
+        const veil = veils.current[i]
+        if (veil) veil.style.opacity = (VEIL * e).toFixed(3)
+      }
+    }
+
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(paint)
+    }
+
+    paint()
+    window.addEventListener('scroll', kick, { passive: true })
+    window.addEventListener('resize', kick)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', kick)
+      window.removeEventListener('resize', kick)
+      for (const el of inners.current) if (el) el.style.transform = ''
+      for (const el of veils.current) if (el) el.style.opacity = ''
+    }
+  }, [on, wraps, inners, veils])
+}
 
 function ProjectCard({ n, title }) {
   return (
@@ -72,8 +135,24 @@ function ProjectCard({ n, title }) {
 }
 
 function WorkList() {
+  const [stack, setStack] = useState(() => window.matchMedia(STACKABLE).matches)
+  const wraps = useRef([])
+  const inners = useRef([])
+  const veils = useRef([])
+
+  useEffect(() => {
+    const mq = window.matchMedia(STACKABLE)
+    const sync = () => setStack(mq.matches)
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
+  useCardStack(stack, wraps, inners, veils)
+
   return (
-    <section id="work" className="relative isolate -mt-px overflow-hidden bg-[#0a0101] font-jost text-white">
+    // No overflow clip: it would make this the scroll container and the cards below
+    // would never pin. Every layer inside already keeps to its own box.
+    <section id="work" className="relative isolate -mt-px bg-[#0a0101] font-jost text-white">
       {/* Red pool low in the section, matching the mock-up's bottom glow. */}
       <div
         aria-hidden="true"
@@ -107,9 +186,45 @@ function WorkList() {
           My Work
         </h2>
 
-        <div className="flex flex-col gap-[clamp(1.75rem,5.35vw,4.8rem)]">
-          {PROJECTS.map((p) => (
-            <ProjectCard key={p.n} {...p} />
+        {/* Stacked, the gap is what each card stays pinned for before the next one
+            reaches it, so it is opened up to give the hand-off room to read. */}
+        <div
+          className={`flex flex-col ${
+            stack ? 'gap-[clamp(4rem,11vw,11rem)] pb-[clamp(3rem,8vw,8rem)]' : 'gap-[clamp(1.75rem,5.35vw,4.8rem)]'
+          }`}
+        >
+          {PROJECTS.map((p, i) => (
+            <div
+              key={p.n}
+              ref={(el) => {
+                wraps.current[i] = el
+              }}
+              // Each card pins a little lower than the one it covers, and over it.
+              className={stack ? 'sticky' : undefined}
+              style={{ top: `calc(${STACK_TOP} + ${i * PEEK}px)`, zIndex: i + 1 }}
+            >
+              <div
+                ref={(el) => {
+                  inners.current[i] = el
+                }}
+                className="relative will-change-transform"
+                style={{ transformOrigin: 'top center' }}
+              >
+                <ProjectCard {...p} />
+
+                {/* Dims the card as the next one comes over it, so it reads as
+                    receding rather than simply being hidden. */}
+                {stack && (
+                  <span
+                    ref={(el) => {
+                      veils.current[i] = el
+                    }}
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 rounded-[22px] bg-[#060101] opacity-0"
+                  />
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </div>
