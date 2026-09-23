@@ -15,6 +15,23 @@ const INFO = [
 
 const SERVICES = ['User-Centered Design', 'Pixel-perfect Interfaces', 'Responsive Design', 'Prototyping']
 
+// Lives in public/, so it keeps this exact filename in the build and is what the
+// visitor ends up with in their downloads folder.
+const CV_FILE = 'TalhaMushtaq-UIUX-resume.pdf'
+const CV_URL = `${import.meta.env.BASE_URL}${CV_FILE}`
+
+// The anchor's own target="_blank" opens the PDF in a tab; this adds the save on
+// top of it. A second anchor is needed because `download` on the visible one would
+// replace the navigation rather than accompany it.
+const saveCv = () => {
+  const a = document.createElement('a')
+  a.href = CV_URL
+  a.download = CV_FILE
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+}
+
 // The two cards are kept compact so the poster stays the focus. Everything inside
 // them is sized through c(), which is k() shrunk by CARD_SCALE; ct() also keeps
 // small text from dropping below a readable pixel size on narrow screens.
@@ -153,7 +170,10 @@ function HeroDetails() {
           A little something about me
         </p>
         <a
-          href="#"
+          href={CV_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={saveCv}
           className="flex items-center justify-center border border-[#5a1818] bg-linear-to-b from-[#3a0808] to-[#1c0202] font-medium text-[#df6464] transition-colors hover:border-[#8a2a2a] hover:text-[#f08080]"
           style={{ height: c(44), borderRadius: c(7), marginTop: c(12), gap: c(7), fontSize: ct(11, 10) }}
         >
