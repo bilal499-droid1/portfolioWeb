@@ -6,9 +6,10 @@ import { useEffect, useRef } from 'react'
 //                     card leans in, overshoots a touch and settles back when it leaves.
 //                     A child styled with translateZ(...) floats above the card's face.
 //   <PixelGravityImage> draws an image on a canvas. Under the pointer it breaks into
-//                     square pixels, and the cursor acts like a small mass: pixels
-//                     within its reach are pulled toward it on springs, shrinking as
-//                     they go so the gaps open up behind them, then drop back into place.
+//                     square pixels, and the cursor acts like a small charge: the few
+//                     pixels within its reach are pushed away from it on springs,
+//                     shrinking as they go so a clearing opens around the cursor, then
+//                     drop back into place.
 //
 // The image listens to the nearest <PixelTilt> (or its own box, used alone). Both only
 // animate while something is moving, and fall back to the plain, still image without a
@@ -23,9 +24,9 @@ const CELL_DIVISIONS = 34 // pixels across the image
 const RISE = 0.06 // s: how fast a pixel wakes as the cursor reaches it
 const SETTLE = 0.45 // s: how slowly it falls back asleep
 const CURSOR_LAG = 0.05 // s: the pull eases toward the real pointer
-const STIFFNESS = 80 // spring pulling a pixel toward where the cursor wants it
+const STIFFNESS = 80 // spring driving a pixel to where the cursor wants it
 const DAMPING = 10 // one soft overshoot on the way back
-const GAP_COLOR = '#140606' // shows through where pixels have been pulled away
+const GAP_COLOR = '#140606' // shows through where pixels have been pushed away
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -164,9 +165,8 @@ export function PixelGravityImage({ src, alt, className = '' }) {
     let offY = new Float32Array(0)
     let velX = new Float32Array(0)
     let velY = new Float32Array(0)
-    let reach = 120
-    let pullMax = 30
-    let soften = 20
+    let reach = 70
+    let pushMax = 26
     let sx = 0 // the cursor's eased position, in canvas CSS px
     let sy = 0
     let tracking = false
@@ -199,9 +199,9 @@ export function PixelGravityImage({ src, alt, className = '' }) {
       cell = w / CELL_DIVISIONS
       cols = CELL_DIVISIONS
       rows = Math.ceil(h / cell)
-      reach = Math.min(w * 0.42, 170)
-      pullMax = cell * 3.2
-      soften = cell * 1.5
+      // Kept tight on purpose: only a small cluster around the cursor should react.
+      reach = Math.min(w * 0.22, 95)
+      pushMax = cell * 2.4
 
       // Each pixel's colour is the average of the image under it: let the browser
       // downsample the whole image to one texel per cell.
@@ -288,10 +288,10 @@ export function PixelGravityImage({ src, alt, className = '' }) {
               const d = Math.sqrt(d2)
               const t = 1 - d / reach
               target = t * t * (3 - 2 * t)
-              // Drawn toward the cursor, softened close in and never past halfway.
-              const pull = Math.min(pullMax * target * (d / (d + soften)) * 1.6, d * 0.5)
-              tx = (dx / d) * pull
-              ty = (dy / d) * pull
+              // Shoved away from the cursor, hardest for the pixels right under it.
+              const push = pushMax * target
+              tx = -(dx / d) * push
+              ty = -(dy / d) * push
             }
           }
 
@@ -319,8 +319,8 @@ export function PixelGravityImage({ src, alt, className = '' }) {
         }
       }
 
-      // Pass 2: draw the awake pixels as flat squares at their pulled positions,
-      // smaller the harder they're pulled, so gaps open between them.
+      // Pass 2: draw the awake pixels as flat squares at their pushed positions,
+      // smaller the harder they're pushed, so gaps open between them.
       for (let j = 0; j < rows; j++) {
         for (let i = 0; i < cols; i++) {
           const idx = j * cols + i
