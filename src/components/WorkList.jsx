@@ -108,7 +108,7 @@ function ProjectCard({ n, title }) {
           {n} <span className="px-[0.25em] text-[#d23f50]/60">/</span> {TOTAL}
         </p>
 
-        <h3 className="mt-[1.2rem] text-[clamp(1.6rem,2.78vw,2.5rem)] leading-none font-normal tracking-[-0.01em] text-white/40 transition-colors duration-500 group-hover:text-[#e1201a]">
+        <h3 className="mt-[1.2rem] text-[clamp(1.6rem,2.78vw,2.5rem)] leading-none font-bold tracking-[-0.01em] text-white transition-colors duration-500 group-hover:text-[#e1201a]">
           {title}
         </h3>
 
