@@ -20,7 +20,7 @@ function AboutIntro() {
     <section
       id="about"
       className="relative overflow-hidden bg-[#0b0101] font-inter"
-      style={{ '--u': 'min(calc(100vw / 762), 2.2px)', paddingTop: `calc(11.5vw + ${u(50)})`, paddingBottom: u(248) }}
+      style={{ '--u': 'min(calc(100vw / 762), 2.2px)', paddingTop: `calc(11.5vw + ${u(50)})`, paddingBottom: u(132) }}
     >
       {/* Red glow low in the section, then the faint dot grid (the halftone field) over
           everything. The glow is exactly spent at the bottom edge (76% + 24% = 100%), and
