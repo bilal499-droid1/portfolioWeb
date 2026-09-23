@@ -1,6 +1,10 @@
-// Footer, measured from footer.png (a 960px-wide mock-up). The EMAIL and
-// CONTACT wordmarks are outlined and deliberately clipped by the bottom of
-// their row, as in the mock-up.
+// Footer, taken from the Figma frame "Frame 512" (1648:2604), a 1920px artboard.
+// Sizes and offsets are that frame's pixels expressed as vw, so the whole block
+// scales the way the artboard does, with clamps holding it together on a phone.
+//
+// The wordmarks are deliberately clipped: EMAIL and CONTACT by the bottom of the
+// contact row, and LetsTalk by the footer's own bottom edge, with the legal bar
+// laid over it rather than sitting below it.
 const EMAIL = 'talhamushtaq03official@gmail.com'
 const PHONE = '0324-5486292'
 
@@ -9,22 +13,33 @@ const LINKS = [
   { label: 'Behance', href: 'https://www.behance.net/' },
 ]
 
+// 1920px artboard value -> vw, with a floor for narrow screens and the artboard
+// value itself as the ceiling so nothing keeps growing past the design.
+const v = (px, minRem) => `clamp(${minRem}rem, ${((px / 1920) * 100).toFixed(2)}vw, ${(px / 16).toFixed(4)}rem)`
+
 function ContactCell({ label, value, href, mark }) {
   return (
-    <div data-reveal="up" className="relative overflow-hidden px-[2rem] pt-[clamp(2.5rem,6.6vw,6rem)] pb-[clamp(3rem,7vw,6.5rem)] text-right">
+    <div
+      data-reveal="up"
+      className="relative overflow-hidden px-[2rem] text-right"
+      style={{ paddingTop: v(122, 2), paddingBottom: v(218, 3) }}
+    >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-[0.3em] left-[1.5rem] font-sans text-[clamp(3rem,9.5vw,8rem)] leading-none font-extrabold tracking-[0.02em] whitespace-nowrap select-none"
-        style={{ WebkitTextStroke: '1px rgba(190,60,54,0.13)', color: 'transparent' }}
+        className="pointer-events-none absolute -bottom-[0.3em] left-[1.5rem] font-sans leading-none font-extrabold tracking-[0.02em] whitespace-nowrap select-none"
+        style={{ fontSize: v(197, 3), WebkitTextStroke: '1px rgba(190,60,54,0.13)', color: 'transparent' }}
       >
         {mark}
       </span>
 
-      <p className="relative text-[0.8125rem] text-white/30">{label}</p>
+      <p className="relative font-light text-[#995d5d]" style={{ fontSize: v(18, 0.75) }}>
+        {label}
+      </p>
       <p className="relative mt-[0.85rem]">
         <a
           href={href}
-          className="text-[clamp(0.95rem,1.4vw,1.25rem)] text-[#b8453d] transition-colors duration-300 hover:text-[#e4665f]"
+          className="text-[#863131] transition-colors duration-300 hover:text-[#b8453d]"
+          style={{ fontSize: v(25, 0.95) }}
         >
           {value}
         </a>
@@ -45,9 +60,13 @@ function Footer() {
       />
 
       {/* Developed-by line above the contact row */}
-      <div data-reveal="fade" className="relative px-[clamp(1.5rem,4vw,3.5rem)] pt-[clamp(2rem,4.5vw,4rem)] pb-[clamp(1.25rem,2.4vw,2rem)] text-right">
-        <p className="text-[0.8125rem] text-white/28">
-          Developed by <span className="text-[#b8453d]">Bilal</span>
+      <div
+        data-reveal="fade"
+        className="relative text-right"
+        style={{ paddingInline: v(73, 1.5), paddingTop: v(107, 2), paddingBottom: v(20, 1.25) }}
+      >
+        <p className="text-[#3c1e1e]" style={{ fontSize: v(19, 0.8125) }}>
+          Developed by <span className="text-[#863d3d]">Bilal</span>
         </p>
       </div>
 
@@ -62,37 +81,56 @@ function Footer() {
         />
       </div>
 
-      {/* Oversized sign-off, bleeding to both edges */}
-      <div data-reveal="fade-slow" className="relative flex justify-center overflow-hidden pt-[clamp(1.5rem,3vw,2.5rem)]">
+      {/* Oversized sign-off, bleeding past both edges and clipped by the footer's own
+          bottom. The legal bar shares this box and is laid over the lower part of the
+          wordmark, as the artboard has it. Too narrow for that to stay legible, the
+          bar drops back below the wordmark instead. */}
+      {/* 536 of the artboard's height, which is what crops the wordmark; on a phone it
+          grows to fit instead, since there the bar sits below rather than over it. */}
+      <div className="relative overflow-hidden sm:h-[27.92vw]" style={{ paddingTop: v(70, 1.5) }}>
         <span
+          data-reveal="fade-slow"
           aria-hidden="true"
-          className="bg-clip-text font-sans text-[18vw] leading-[0.82] font-extrabold tracking-[0.085em] whitespace-nowrap text-transparent select-none"
-          style={{ backgroundImage: 'linear-gradient(170deg, #4a0f0f 0%, #2a0808 46%, #140404 100%)' }}
+          className="block bg-clip-text text-center font-roboto font-extrabold tracking-[-0.03em] whitespace-nowrap text-transparent select-none"
+          style={{
+            // 506px on the artboard; leading is the font's own, which is what makes
+            // the text box tall enough to be cropped at the bottom.
+            fontSize: `clamp(4rem, ${((506 / 1920) * 100).toFixed(2)}vw, 31.625rem)`,
+            lineHeight: 1.172,
+            backgroundImage: 'linear-gradient(180deg, #c81b1b 0%, rgba(16,4,4,0.2) 100%)',
+          }}
         >
           LetsTalk
         </span>
-      </div>
 
-      <div data-reveal="fade" className="relative mx-auto max-w-[59rem] px-[clamp(1rem,2vw,1.5rem)]">
-        <div className="flex flex-col items-center gap-[0.9rem] border-t border-white/[0.07] py-[1.5rem] text-[0.75rem] sm:flex-row sm:justify-between">
-          <p className="text-white/45">© 2026 Talha Mushtaq. All rights reserved.</p>
+        <div
+          data-reveal="fade"
+          className="relative flex justify-center px-[1.5rem] sm:absolute sm:inset-x-0 sm:bottom-0"
+        >
+          {/* 1280 of the artboard's 1920, the same container the design uses. */}
+          <div
+            className="flex w-full max-w-[80rem] flex-col items-center gap-[0.9rem] border-t border-white/[0.05] text-[0.75rem] sm:flex-row sm:justify-between"
+            style={{ paddingTop: v(41, 1.25), paddingBottom: v(40, 1.25) }}
+          >
+            <p className="text-[#c0c0c0]">© 2026 Talha Mushtaq. All rights reserved.</p>
 
-          <nav className="flex items-center gap-[1.75rem] text-white/45">
-            <a href="#top" className="transition-colors duration-300 hover:text-white/80">
-              Back to top ↑
-            </a>
-            {LINKS.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                target="_blank"
-                rel="noreferrer"
-                className="transition-colors duration-300 hover:text-white/80"
-              >
-                {l.label}
+            <nav className="flex items-center gap-[1.5rem] text-[#737373]">
+              <a href="#top" className="transition-colors duration-300 hover:text-white/80">
+                Back to top ↑
               </a>
-            ))}
-          </nav>
+              {LINKS.map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors duration-300 hover:text-white/80"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </nav>
+          </div>
         </div>
       </div>
     </footer>
