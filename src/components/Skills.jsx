@@ -51,9 +51,11 @@ const STAGE_VH = 340
 
 // Windows within the sequence (0 = just pinned, 1 = about to release).
 const RISE_SPAN = 0.2 // the first card coming up from below the fold
-const FAN_START = 0.24 // the row starting to open out from the stack
-const FAN_STEP = 0.14 // between one card leaving the stack and the next
-const FAN_SPAN = 0.3 // one card's own trip out to its slot
+const FAN_START = 0.27 // the row starting to open out from the stack
+// One window for the whole row, so both sides leave the stack on the same frame and
+// the row reads as opening out from the middle. The outer cards simply have further
+// to travel in the same span, which is what gives the spread its shape.
+const FAN_SPAN = 0.56
 const SETTLE = 0.09 // s: how quickly the sequence catches up to the scrollbar
 
 const RED_FILL = 'linear-gradient(180deg, #8f1a1a 0%, #4a0c0c 62%)'
@@ -64,7 +66,7 @@ const smoothstep = (t) => t * t * (3 - 2 * t)
 // A card's progress through its own window of the sequence.
 const phase = (p, start, span) => smoothstep(clamp01((p - start) / span))
 
-function SkillCard({ title, blurb, tags, pinned, depth, cardRef, redRef }) {
+function SkillCard({ title, blurb, tags, pinned, depth, cardRef }) {
   // Pinned, the row has to fit four across and still leave the wordmark visible, so
   // the card loses the mock-up's deep top padding. Everything else is unchanged.
   const pad = pinned ? 'px-[1.1rem] pt-[1.7rem] pb-[2.6rem]' : 'px-[1.25rem] pt-[5rem] pb-[3.6rem]'
@@ -74,19 +76,17 @@ function SkillCard({ title, blurb, tags, pinned, depth, cardRef, redRef }) {
     <article
       ref={cardRef}
       data-reveal={pinned ? undefined : 'scale'}
-      className={`relative flex flex-col rounded-[16px] border border-white/[0.07] ${width} ${pad}`}
+      className={`group/card relative flex flex-col rounded-[16px] border border-white/[0.07] ${width} ${pad}`}
       // Earlier cards sit on top, so the later ones read as coming out from behind them.
       style={{ backgroundImage: BLACK_FILL, zIndex: pinned ? depth : undefined, willChange: pinned ? 'transform' : undefined }}
     >
-      {/* The red state, faded in over the black one so the resting card is untouched. */}
-      {pinned && (
-        <span
-          ref={redRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[16px] border border-[#e07a74]/30 opacity-0"
-          style={{ backgroundImage: RED_FILL }}
-        />
-      )}
+      {/* The red state, faded in over the black one so the resting card is untouched.
+          Hover only, and scoped to this card, so the rest of the row stays black. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-[16px] border border-[#e07a74]/30 opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+        style={{ backgroundImage: RED_FILL }}
+      />
 
       <div className="relative flex flex-1 flex-col">
         <h3
@@ -141,7 +141,7 @@ function SkillCard({ title, blurb, tags, pinned, depth, cardRef, redRef }) {
 function useSkillSequence(on, refs) {
   useEffect(() => {
     if (!on) return
-    const { section, row, fit, cards, reds } = refs
+    const { section, row, fit, cards } = refs
     const stage = section.current
     const rowEl = row.current
     const fitEl = fit.current
@@ -190,13 +190,13 @@ function useSkillSequence(on, refs) {
     }
 
     const paint = (p) => {
+      // Everything rises together, then the whole row opens out together.
+      const up = phase(p, 0, RISE_SPAN)
+      const out = phase(p, FAN_START, FAN_SPAN)
       for (let i = 0; i < cards.current.length; i++) {
         const el = cards.current[i]
         if (!el) continue
         const slot = slots[i] || { dx: 0, dy: 0 }
-        // Everything rises together; then each card leaves the stack in turn.
-        const up = phase(p, 0, RISE_SPAN)
-        const out = phase(p, FAN_START + i * FAN_STEP, FAN_SPAN)
         const x = slot.dx * (1 - out)
         const y = slot.dy * (1 - out) + (1 - up) * rise
         // The ones still stacked sit a little back, so the row has some depth.
@@ -205,9 +205,6 @@ function useSkillSequence(on, refs) {
         // The whole stack fades up together. Fading only the front card would let the
         // ones behind it show through while it was still part-way transparent.
         el.style.opacity = up.toFixed(3)
-        // Each card turns red as it clears the stack, and black again on the way back.
-        const red = reds.current[i]
-        if (red) red.style.opacity = out.toFixed(3)
       }
     }
 
@@ -261,7 +258,6 @@ function useSkillSequence(on, refs) {
         el.style.transform = ''
         el.style.opacity = ''
       }
-      for (const el of reds.current) if (el) el.style.opacity = ''
     }
   }, [on, refs])
 }
@@ -276,8 +272,7 @@ function Skills() {
   const row = useRef(null)
   const fit = useRef(null)
   const cards = useRef([])
-  const reds = useRef([])
-  const refs = useRef({ section, row, fit, cards, reds }).current
+  const refs = useRef({ section, row, fit, cards }).current
 
   useEffect(() => {
     const mq = window.matchMedia(PINNABLE)
@@ -306,9 +301,6 @@ function Skills() {
       depth={SKILLS.length - i}
       cardRef={(el) => {
         cards.current[i] = el
-      }}
-      redRef={(el) => {
-        reds.current[i] = el
       }}
     />
   ))
