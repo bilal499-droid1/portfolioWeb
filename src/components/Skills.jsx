@@ -374,7 +374,9 @@ function Skills() {
           <div ref={fit} className="w-full">
             <div
               ref={row}
-              className="grid w-full grid-cols-2 items-start gap-[clamp(0.9rem,1.6vw,1.5rem)] lg:grid-cols-4"
+              // Stretched on equal rows, so every card matches the one in front of the
+              // stack and none of them pokes out from behind it or ends short in the row.
+              className="grid w-full auto-rows-fr grid-cols-2 items-stretch gap-[clamp(0.9rem,1.6vw,1.5rem)] lg:grid-cols-4"
             >
               {list}
             </div>
