@@ -5,19 +5,39 @@ import HalftoneField from './HalftoneField'
 // The mock-up shows its three cards in three different states — dim, mid, and
 // fully red — which reads as one frame of a hover/scroll reveal rather than
 // three different card designs, so the red state lives on :hover here.
-const TOTAL = '04'
 
 const PROJECTS = [
-  { n: '01', title: 'Kricket.pk' },
-  { n: '02', title: 'Kricket.pk' },
-  { n: '03', title: 'Kricket.pk' },
-]
+  {
+    title: 'Finance Management Portal',
+    role: 'UI Design & Full-Stack Implementation',
+    blurb:
+      'Designed a personal finance dashboard for expense tracking and budget visualization, prioritizing at-a-glance financial clarity over dense tabular data. Implemented a MySQL-backed data layer with real-time chart rendering to turn raw transaction records into readable visual summaries.',
+    tags: ['React.js', 'Tailwind CSS', 'JavaScript', 'MySQL'],
+  },
+  {
+    title: 'Parking Management System',
+    role: 'Full-Stack Application',
+    blurb:
+      'Designed a real-time occupancy dashboard that lets facility operators view and allocate parking slots instantly. Architected role-based Admin and End User views so each stakeholder only sees the workflows relevant to their responsibilities.',
+    tags: ['React.js', 'Tailwind CSS', 'JavaFX', 'Oracle DB'],
+  },
+  {
+    title: 'Fatwarp',
+    role: 'Brand Identity, UI/UX Design & Social Media Marketing',
+    blurb:
+      "Designed end-to-end UI/UX for a food brand's ordering experience, from user journey maps through prototypes covering menu browsing to order confirmation. Created a mobile-first interface with a food-forward visual hierarchy and clearly placed CTAs to support conversion goals. Ran Instagram campaigns for the brand, producing mostly static posts alongside a handful of reels to build visibility and engagement.",
+    tags: ['Figma', 'Adobe Illustrator', 'Photoshop'],
+  },
+  {
+    title: 'Sugarloop',
+    role: 'Brand Identity, UI/UX Design & Social Media Marketing',
+    blurb:
+      "Developed user personas, empathy maps, and interaction flows to translate a bakery brand's product experience into a digital presence. Designed a high-fidelity mobile interface with a visual product showcase and a streamlined ordering flow that reduced steps from discovery to checkout. Ran Instagram campaigns to promote the doughnut offerings and grow audience engagement.",
+    tags: ['Figma', 'Adobe Photoshop'],
+  },
+].map((p, i) => ({ ...p, n: String(i + 1).padStart(2, '0') }))
 
-const BLURB =
-  'A cricket-focused digital experience built around clarity, accessibility, and visual engagement. The interface organizes cricket content into an intuitive structure while maintaining a modern, responsive design across devices.'
-
-const ROLE = 'UI / UX Designer and Frontend Developer'
-const TAGS = ['Javascript', 'Figma', 'React', 'Tailwind']
+const TOTAL = String(PROJECTS.length).padStart(2, '0')
 
 // The stack anchor, and how far each card's top sits below the one it covers, so the
 // deck shows its edges instead of one card hiding the rest completely.
@@ -81,7 +101,7 @@ function useCardStack(on, wraps, inners, veils) {
   }, [on, wraps, inners, veils])
 }
 
-function ProjectCard({ n, title }) {
+function ProjectCard({ n, title, role, blurb, tags }) {
   return (
     <article data-reveal="up-lg" className="group relative overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0e0403] px-[clamp(1.75rem,3.75vw,3.4rem)] pt-[clamp(3rem,7.4vw,6.7rem)] pb-[clamp(2.5rem,5.5vw,5rem)] transition-colors duration-500 hover:border-[#e1201a]/35">
       {/* Red bloom, revealed on hover. */}
@@ -112,18 +132,18 @@ function ProjectCard({ n, title }) {
           {title}
         </h3>
 
-        <p className="mt-[1.4rem] max-w-[44rem] text-[0.9375rem] leading-[1.6] text-[#ac9a9a]/85">{BLURB}</p>
+        <p className="mt-[1.4rem] max-w-[44rem] text-[0.9375rem] leading-[1.6] text-[#ac9a9a]/85">{blurb}</p>
 
         <p className="mt-[1.45rem] flex items-center gap-[0.6rem] text-[0.6875rem] tracking-[0.01em] text-[#c3221d]">
           <span aria-hidden="true" className="h-[1.15rem] w-[2px] bg-[#c3221d]" />
-          {ROLE}
+          {role}
         </p>
 
-        <ul className="mt-[2.95rem] flex flex-wrap gap-[0.45rem]">
-          {TAGS.map((tag) => (
+        <ul className="mt-[2.95rem] flex flex-wrap gap-[0.6rem]">
+          {tags.map((tag) => (
             <li
               key={tag}
-              className="rounded-full border border-white/[0.09] bg-white/[0.03] px-[0.7rem] py-[0.15rem] text-[0.5625rem] tracking-[0.02em] text-[#8e8b8b]"
+              className="rounded-full border border-white/[0.14] bg-white/[0.05] px-[1rem] py-[0.35rem] text-[0.8125rem] font-semibold tracking-[0.02em] text-[#d4cfcf]"
             >
               {tag}
             </li>

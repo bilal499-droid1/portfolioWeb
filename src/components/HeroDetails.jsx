@@ -17,7 +17,7 @@ const SERVICES = ['User-Centered Design', 'Pixel-perfect Interfaces', 'Responsiv
 
 // Lives in public/, so it keeps this exact filename in the build and is what the
 // visitor ends up with in their downloads folder.
-const CV_FILE = 'TalhaMushtaq-UIUX-resume.pdf'
+const CV_FILE = 'Talha_Mushtaq_Software_Engineer.pdf'
 const CV_URL = `${import.meta.env.BASE_URL}${CV_FILE}`
 
 // The anchor's own target="_blank" opens the PDF in a tab; this adds the save on

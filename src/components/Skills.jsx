@@ -115,8 +115,8 @@ function SkillCard({ title, blurb, tags, pinned, depth, cardRef }) {
           {tags.map((tag) => (
             <li
               key={tag}
-              className={`rounded-[5px] border border-[#c47a72]/25 leading-none text-[#b89a98] ${
-                pinned ? 'px-[0.55rem] py-[0.42rem] text-[0.7rem]' : 'px-[0.7rem] py-[0.5rem] text-[0.8125rem]'
+              className={`rounded-[5px] border border-[#c47a72]/25 leading-none font-semibold text-[#b89a98] ${
+                pinned ? 'px-[0.6rem] py-[0.45rem] text-[0.8rem]' : 'px-[0.75rem] py-[0.55rem] text-[0.9rem]'
               }`}
             >
               {tag}

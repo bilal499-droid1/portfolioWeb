@@ -25,18 +25,6 @@ function Logo() {
   )
 }
 
-function AvailabilityBadge() {
-  return (
-    <span className="inline-flex h-7.5 items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-950/70 px-3 text-[11.5px] text-emerald-400/90">
-      <span className="relative flex size-2">
-        <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60 motion-reduce:hidden" />
-        <span className="relative size-2 rounded-full bg-emerald-500" />
-      </span>
-      Available for Q2 Projects
-    </span>
-  )
-}
-
 function TalkButton({ className = '' }) {
   return (
     <a
@@ -81,7 +69,6 @@ function Header() {
 
         <div className="hidden flex-1 items-center gap-4 lg:flex">
           <div className="ml-[50px] flex items-center gap-4">
-            <AvailabilityBadge />
             <TalkButton />
           </div>
         </div>
@@ -125,7 +112,6 @@ function Header() {
             ))}
           </ul>
           <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/5 pt-4">
-            <AvailabilityBadge />
             <TalkButton />
           </div>
         </div>
