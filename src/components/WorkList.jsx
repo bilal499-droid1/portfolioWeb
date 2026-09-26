@@ -22,18 +22,28 @@ const PROJECTS = [
     tags: ['React.js', 'Tailwind CSS', 'JavaFX', 'Oracle DB'],
   },
   {
-    title: 'Fatwarp',
+    title: 'Fatwrap.pk',
+    url: 'https://fatwrap.pk',
     role: 'Brand Identity, UI/UX Design & Social Media Marketing',
     blurb:
       "Designed end-to-end UI/UX for a food brand's ordering experience, from user journey maps through prototypes covering menu browsing to order confirmation. Created a mobile-first interface with a food-forward visual hierarchy and clearly placed CTAs to support conversion goals. Ran Instagram campaigns for the brand, producing mostly static posts alongside a handful of reels to build visibility and engagement.",
     tags: ['Figma', 'Adobe Illustrator', 'Photoshop'],
   },
   {
-    title: 'Sugarloop',
+    title: 'Sugarloop.pk',
+    url: 'https://sugarloop.pk',
     role: 'Brand Identity, UI/UX Design & Social Media Marketing',
     blurb:
       "Developed user personas, empathy maps, and interaction flows to translate a bakery brand's product experience into a digital presence. Designed a high-fidelity mobile interface with a visual product showcase and a streamlined ordering flow that reduced steps from discovery to checkout. Ran Instagram campaigns to promote the doughnut offerings and grow audience engagement.",
     tags: ['Figma', 'Adobe Photoshop'],
+  },
+  {
+    title: 'Kricket.pk',
+    url: 'https://kricket.pk',
+    role: 'UI / UX Designer and Frontend Developer',
+    blurb:
+      'A cricket-focused digital experience built around clarity, accessibility, and visual engagement. The interface organizes cricket content into an intuitive structure while maintaining a modern, responsive design across devices.',
+    tags: ['JavaScript', 'Figma', 'React', 'Tailwind'],
   },
 ].map((p, i) => ({ ...p, n: String(i + 1).padStart(2, '0') }))
 
@@ -101,7 +111,7 @@ function useCardStack(on, wraps, inners, veils) {
   }, [on, wraps, inners, veils])
 }
 
-function ProjectCard({ n, title, role, blurb, tags }) {
+function ProjectCard({ n, title, url, role, blurb, tags }) {
   return (
     <article data-reveal="up-lg" className="group relative overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0e0403] px-[clamp(1.75rem,3.75vw,3.4rem)] pt-[clamp(3rem,7.4vw,6.7rem)] pb-[clamp(2.5rem,5.5vw,5rem)] transition-colors duration-500 hover:border-[#e1201a]/35">
       {/* Red bloom, revealed on hover. */}
@@ -129,7 +139,31 @@ function ProjectCard({ n, title, role, blurb, tags }) {
         </p>
 
         <h3 className="mt-[1.2rem] text-[clamp(1.6rem,2.78vw,2.5rem)] leading-none font-bold tracking-[-0.01em] text-white transition-colors duration-500 group-hover:text-[#e1201a]">
-          {title}
+          {url ? (
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[0.3em] underline-offset-[0.18em] hover:underline"
+            >
+              {title}
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="size-[0.6em] transition-transform duration-300 group-hover:translate-x-[0.08em] group-hover:-translate-y-[0.08em]"
+              >
+                <path d="M7 17 17 7M8 7h9v9" />
+              </svg>
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          ) : (
+            title
+          )}
         </h3>
 
         <p className="mt-[1.4rem] max-w-[44rem] text-[0.9375rem] leading-[1.6] text-[#ac9a9a]/85">{blurb}</p>

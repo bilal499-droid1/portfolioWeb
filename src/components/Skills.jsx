@@ -9,12 +9,12 @@ import HalftoneField from './HalftoneField'
 //
 //   1. the wordmark rises with the page and locks once it reaches the middle
 //   2. the first card rises from below the fold and settles on the wordmark
-//   3. the other three slide out from behind it into the row, turning red as they go
+//   3. the others slide out from behind it into the grid, turning red as they go
 //
 // Everything is driven by how far the reader has scrolled into the section, so it
 // runs backwards just as well. The row's resting layout is ordinary CSS grid; the
 // sequence only ever applies a transform offset from where a card already sits,
-// which is what keeps 4-across, 2x2 and the phone list on the same code path.
+// which is what keeps 3-across, 2-across and the phone list on the same code path.
 //
 // Narrow screens and reduced motion get the plain, unpinned row instead.
 
@@ -26,22 +26,34 @@ const SKILLS = [
     tags: ['Optimization', 'Data Structures', 'Logical reasoning', 'Complexity Analysis'],
   },
   {
-    title: ['Interface &', 'Experience Design'],
+    title: ['UI/UX', 'Design'],
     blurb:
       'Shaping research, flows and hierarchy into interfaces that stay legible under real content, then holding them together with a design system that survives contact with a roadmap.',
-    tags: ['Design Systems', 'Prototyping', 'User Research', 'Accessibility'],
+    tags: ['Figma', 'Unicorn', 'Framer', 'Design Hierarchy', 'Design Principles', 'Prototyping', 'Wireframing', 'Personas'],
   },
   {
     title: ['Web', 'Engineering'],
     blurb:
       'Building what the design promises: responsive, accessible front-ends with measured performance budgets, so the shipped product keeps the detail the mock-up had.',
-    tags: ['React', 'Tailwind', 'Performance', 'Responsive Build'],
+    tags: ['React.js', 'Node.js', 'Tailwind', 'Axios'],
   },
   {
     title: ['Motion &', 'Post Production'],
     blurb:
       'Giving interfaces and stories their timing — motion that explains a change rather than decorating it, and edits graded and cut to hold attention from the first frame.',
-    tags: ['Motion Graphics', 'Video Editing', 'Color Grading', 'Micro-interactions'],
+    tags: ['Premiere Pro', 'After Effects', 'SaaS Animations', '3D Animations', 'Long Form', 'Short Form', 'Color Grading'],
+  },
+  {
+    title: ['Backend', 'Development'],
+    blurb:
+      'The server side of the product: REST APIs, authentication and sessions built so the front-end can trust what it gets back and users stay signed in securely.',
+    tags: ['Express.js', 'Node.js', 'Mongoose', 'JWT', 'Django', 'Cookies'],
+  },
+  {
+    title: ['Databases'],
+    blurb:
+      'Modelling data around how it is actually read and written, across document and relational stores, so queries stay simple and records stay consistent as the app grows.',
+    tags: ['Mongoose', 'SQL', 'SQLite3', 'MariaDB', 'MongoDB'],
   },
 ]
 
@@ -67,7 +79,7 @@ const smoothstep = (t) => t * t * (3 - 2 * t)
 const phase = (p, start, span) => smoothstep(clamp01((p - start) / span))
 
 function SkillCard({ title, blurb, tags, pinned, depth, cardRef }) {
-  // Pinned, the row has to fit four across and still leave the wordmark visible, so
+  // Pinned, the grid has to fit three across and still leave the wordmark visible, so
   // the card loses the mock-up's deep top padding. Everything else is unchanged.
   const pad = pinned ? 'px-[1.1rem] pt-[1.7rem] pb-[2.6rem]' : 'px-[1.25rem] pt-[5rem] pb-[3.6rem]'
   const width = pinned ? 'w-full' : 'w-[clamp(17rem,24vw,21.5rem)]'
@@ -262,7 +274,7 @@ function useSkillSequence(on, refs) {
   }, [on, refs])
 }
 
-// The pinned sequence needs room for four cards and a reader who is using a scroll
+// The pinned sequence needs room for the card grid and a reader who is using a scroll
 // wheel, so it is kept to tablets and up, and off entirely for reduced motion.
 const PINNABLE = '(min-width: 768px) and (prefers-reduced-motion: no-preference)'
 
@@ -376,7 +388,7 @@ function Skills() {
               ref={row}
               // Stretched on equal rows, so every card matches the one in front of the
               // stack and none of them pokes out from behind it or ends short in the row.
-              className="grid w-full auto-rows-fr grid-cols-2 items-stretch gap-[clamp(0.9rem,1.6vw,1.5rem)] lg:grid-cols-4"
+              className="grid w-full auto-rows-fr grid-cols-2 items-stretch gap-[clamp(0.9rem,1.6vw,1.5rem)] lg:grid-cols-3"
             >
               {list}
             </div>

@@ -3,8 +3,7 @@ import { useState } from 'react'
 const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'My Work', href: '#work' },
-  { label: 'Design Systems', href: '#design-systems' },
-  { label: 'Experience', href: '#experience' },
+  { label: 'Experience', href: '#trajectory' },
 ]
 
 function Logo() {

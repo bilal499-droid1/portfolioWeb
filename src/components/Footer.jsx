@@ -50,7 +50,7 @@ function ContactCell({ label, value, href, mark }) {
 
 function Footer() {
   return (
-    <footer className="relative isolate overflow-hidden bg-[#090303] font-jost text-white">
+    <footer id="contact" className="relative isolate overflow-hidden bg-[#090303] font-jost text-white">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -66,7 +66,15 @@ function Footer() {
         style={{ paddingInline: v(73, 1.5), paddingTop: v(107, 2), paddingBottom: v(20, 1.25) }}
       >
         <p className="text-[#3c1e1e]" style={{ fontSize: v(19, 0.8125) }}>
-          Developed by <span className="text-[#863d3d]">Bilal</span>
+          Developed by{' '}
+          <a
+            href="https://personal-portfolio-wpxq.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#863d3d] underline-offset-[0.2em] transition-colors hover:text-[#c25555] hover:underline"
+          >
+            Bilal
+          </a>
         </p>
       </div>
 

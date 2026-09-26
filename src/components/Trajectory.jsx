@@ -11,7 +11,7 @@ import HalftoneField from './HalftoneField'
 // them for the real copy.
 const ENTRIES = [
   {
-    range: '2026 — Present',
+    range: 'DevOps Trainee at INARA Technologies',
     badge: 'Forward Decade',
     title: 'Design Systems Lead & AI UX Architect',
     aside: 'Active Practice',
@@ -25,7 +25,7 @@ const ENTRIES = [
     featured: true,
   },
   {
-    range: '2025 — 2026',
+    range: 'Junior UI/UX Designer at Hexler Tech',
     badge: 'Lead Chapter',
     title: 'Lead UI/UX Designer & Technologist',
     aside: 'Studio / Contract',
@@ -35,7 +35,7 @@ const ENTRIES = [
     tags: ['Primary Tag', 'Second Tag', 'Third Tag'],
   },
   {
-    range: '2024 — 2025',
+    range: 'UI/UX and Development Intern at INARA Technologies',
     badge: 'Scale Up',
     title: 'Senior Product Designer',
     aside: 'Product Systems',
@@ -45,7 +45,7 @@ const ENTRIES = [
     tags: ['Primary Tag', 'Second Tag', 'Third Tag'],
   },
   {
-    range: '2023 — 2024',
+    range: '2021 — 2025 BS in Software Engineering from University of Engineering and Technology, Taxila',
     badge: 'Agency & Labs',
     title: 'UI/UX Designer & Frontend Dev',
     aside: 'Agency Work',
@@ -55,7 +55,7 @@ const ENTRIES = [
     tags: ['Primary Tag', 'Second Tag', 'Third Tag'],
   },
   {
-    range: '2021 — 2023',
+    range: 'Creative Design Freelancer since 2023',
     badge: 'Digital Shift',
     title: 'Visual & Interaction Designer',
     aside: 'Early Practice',
@@ -100,7 +100,7 @@ function Entry({ entry, index, total, nodeRef }) {
       {/* Left rail: date and chapter badge */}
       <div className="relative z-[1] sm:pr-[1.5rem] sm:text-right">
         <p
-          className="font-mono text-[0.8125rem] tracking-[0.06em] whitespace-nowrap"
+          className="font-mono text-[0.8125rem] leading-[1.4] tracking-[0.06em] text-balance"
           style={{ color: `rgba(255,255,255,${0.35 + 0.6 * fade})` }}
         >
           {range}
@@ -330,7 +330,7 @@ function Trajectory() {
         </p>
 
         <h2 data-reveal="up" className="mt-[1.35rem] text-center text-[clamp(1.5rem,2.45vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.02em] text-white">
-          Trajectory Across Design &amp; Code
+          My Professional Journey
         </h2>
 
         <p data-reveal="up" className="mx-auto mt-[0.9rem] max-w-[27rem] text-center text-[0.8125rem] leading-[1.6] text-white/35">
