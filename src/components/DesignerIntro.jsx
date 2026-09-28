@@ -1,4 +1,4 @@
-import suv1 from '../assets/suv1.png'
+import mandela from '../assets/mandela.png'
 import HalftoneField from './HalftoneField'
 import { PixelGravityImage, PixelTilt } from './PixelTilt'
 
@@ -131,8 +131,8 @@ function DesignerIntro() {
               >
                 <div className="relative aspect-[182/225] overflow-hidden rounded-[8px]">
                   <PixelGravityImage
-                    src={suv1}
-                    alt="Chick in a yellow raincoat standing on wet pavement"
+                    src={mandela}
+                    alt="Portrait of Nelson Mandela"
                     className="h-full w-full"
                   />
 
