@@ -1,25 +1,70 @@
-
+import { useEffect, useRef } from 'react'
 import HalftoneField from './HalftoneField'
 
+const clamp01 = (n) => (n < 0 ? 0 : n > 1 ? 1 : n)
+
+// Grows the red rail as the reader scrolls through the timeline: it fills to wherever
+// the middle of the screen has reached, and a glowing head rides its tip. Reduced
+// motion gets the rail fully drawn.
+function useRailProgress() {
+  const track = useRef(null)
+  const fill = useRef(null)
+  const head = useRef(null)
+
+  useEffect(() => {
+    const draw = (p) => {
+      const line = fill.current
+      const dot = head.current
+      if (line) line.style.transform = `scaleY(${p.toFixed(4)})`
+      if (dot) {
+        dot.style.top = `${(p * 100).toFixed(3)}%`
+        dot.style.opacity = p > 0.002 && p < 0.998 ? '1' : '0'
+      }
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      draw(1)
+      return
+    }
+
+    let raf = 0
+    const paint = () => {
+      raf = 0
+      const el = track.current
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      if (r.height > 0) draw(clamp01((window.innerHeight * 0.55 - r.top) / r.height))
+    }
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(paint)
+    }
+
+    paint()
+    window.addEventListener('scroll', kick, { passive: true })
+    window.addEventListener('resize', kick)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', kick)
+      window.removeEventListener('resize', kick)
+    }
+  }, [])
+
+  return { track, fill, head }
+}
+
 // Sixth screen ("Trajectory"), measured from suv5.png (a 510px-wide mock-up).
-//
-// ⚠ COPY IS PLACEHOLDER. suv5.png is 510px wide for a full page, which puts the
-// body text at roughly 2px per character — unreadable at any magnification. The
-// date ranges, the role titles and the section header below were legible and are
-// taken from the mock-up. Every `aside`, `badge`, `subtitle`, `body` and `bullets`
-// value is a stand-in of the right length so the layout matches; swap
-// them for the real copy.
 const ENTRIES = [
   {
     range: 'Present',
     badge: 'Forward Decade',
     title: 'DevOps Trainee at INARA Technologies',
     aside: 'Active Practice',
-    subtitle: 'Focus line for this role goes here',
-    body: 'Replace this paragraph with the description for this role. At this width it runs to about three lines, which is what the mock-up shows for the opening entry.',
+    subtitle: 'Building, shipping and running software reliably',
+    body: 'Learning the other half of the product lifecycle: how code gets from a commit to production. I work on CI/CD pipelines, containerised deployments and cloud infrastructure, bringing a designer’s eye for clarity to how systems are built, monitored and maintained.',
     bullets: [
-      'Replace with the first achievement for this role',
-      'Replace with the second achievement for this role',
+      'Setting up automated build, test and deployment pipelines',
+      'Working with Docker, Linux servers and cloud environments',
     ],
     featured: true,
   },
@@ -28,45 +73,33 @@ const ENTRIES = [
     badge: 'Lead Chapter',
     title: 'Junior UI/UX Designer at Hexler Tech',
     aside: 'Studio / Contract',
-    subtitle: 'Focus line for this role goes here',
-    body: 'Replace this paragraph with the description for this role. At this width it runs to about three lines, matching the mock-up.',
-    bullets: ['Replace with the first achievement', 'Replace with the second achievement'],
+    subtitle: 'Designing clear, usable interfaces for real products',
+    body: 'Designed web and mobile interfaces from early wireframes through to polished, developer-ready screens. I worked closely with developers and stakeholders to turn requirements into user flows, prototypes and consistent visual systems in Figma.',
+    bullets: [
+      'Produced wireframes, high-fidelity mock-ups and interactive prototypes',
+      'Built reusable components to keep designs consistent across screens',
+    ],
   },
   {
     range: '2024 — 2025',
     badge: 'Scale Up',
     title: 'UI/UX and Frontend Intern at INARA Technologies',
     aside: 'Product Systems',
-    subtitle: 'Focus line for this role goes here',
-    body: 'Replace this paragraph with the description for this role. At this width it runs to about three lines, matching the mock-up.',
-    bullets: ['Replace with the first achievement', 'Replace with the second achievement'],
+    subtitle: 'Where design met code',
+    body: 'Worked across design and frontend development, taking interfaces from Figma into working, responsive pages. The role taught me how design decisions play out in code, and how to build layouts that stay faithful to the design on every screen size.',
+    bullets: [
+      'Designed UI screens and turned them into responsive frontend pages',
+      'Collaborated with the development team on real client projects',
+    ],
   },
   {
-    range: '2021 — 2025 BS in Software Engineering from University of Engineering and Technology, Taxila',
-    badge: 'Agency & Labs',
-    title: 'UI/UX Designer & Frontend Dev',
-    aside: 'Agency Work',
-    subtitle: 'Focus line for this role goes here',
-    body: 'Replace this paragraph with the description for this role. At this width it runs to about two lines, matching the mock-up.',
-    bullets: ['Replace with the first achievement'],
-  },
-  {
-    range: 'Creative Design Freelancer since 2023',
-    badge: 'Digital Shift',
-    title: 'Visual & Interaction Designer',
-    aside: 'Early Practice',
-    subtitle: 'Focus line for this role goes here',
-    body: 'Replace this paragraph with the description for this role. At this width it runs to about two lines, matching the mock-up.',
-    bullets: ['Replace with the first achievement'],
-  },
-  {
-    range: '2013 — 2017',
+    range: '2021 — 2025',
     badge: 'Academic Foundation',
-    title: 'B.S. in Computer Science & Interaction Design',
+    title: 'BS in Software Engineering from University of Engineering and Technology, Taxila',
     aside: 'Education',
-    subtitle: 'Focus line for this qualification goes here',
-    body: 'Replace this paragraph with the description for this qualification. At this width it runs to about two lines, matching the mock-up.',
-    bullets: ['Replace with a highlight from this period'],
+    subtitle: 'The engineering foundation behind the design work',
+    body: 'Studied the full software development lifecycle, from requirements and system design to programming, testing and project management, alongside human-computer interaction, which shaped my interest in user-centred design.',
+    bullets: ['Built a strong base in software design, development and teamwork'],
   },
 ]
 
@@ -162,6 +195,8 @@ function Entry({ entry, index, total }) {
 }
 
 function Trajectory() {
+  const { track, fill, head } = useRailProgress()
+
   return (
     <section id="trajectory" className="relative isolate -mt-px overflow-hidden bg-[#0a0101] font-jost text-white">
       <div
@@ -200,15 +235,30 @@ function Trajectory() {
           forward-looking autonomous AI design systems.
         </p>
 
-        {/* The rail runs behind the nodes and fades toward the earliest entry. */}
-        <div className="relative mt-[clamp(2.5rem,5vw,4rem)]">
+        {/* The rail runs behind the nodes: a faint track, and a red fill that grows down
+            it as the reader scrolls. */}
+        <div ref={track} className="relative mt-[clamp(2.5rem,5vw,4rem)]">
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 hidden w-px sm:block"
+            className="pointer-events-none absolute inset-y-0 hidden w-px bg-[rgba(240,40,34,0.14)] sm:block"
+            style={{ left: '11rem' }}
+          />
+          <span
+            ref={fill}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 hidden w-[2px] origin-top -translate-x-1/2 sm:block"
             style={{
-              left: '11rem',
-              backgroundImage: 'linear-gradient(180deg, #f02822 0%, rgba(240,40,34,0.55) 42%, rgba(240,40,34,0.12) 100%)',
+              left: 'calc(11rem + 0.5px)',
+              transform: 'scaleY(0)',
+              backgroundImage: 'linear-gradient(180deg, #f02822 0%, #f02822 70%, rgba(240,40,34,0.6) 100%)',
+              boxShadow: '0 0 8px rgba(240,40,34,0.55)',
             }}
+          />
+          <span
+            ref={head}
+            aria-hidden="true"
+            className="pointer-events-none absolute z-[2] hidden size-[7px] -translate-1/2 rounded-full bg-[#ff4a42] opacity-0 transition-opacity duration-300 sm:block"
+            style={{ left: 'calc(11rem + 0.5px)', top: 0, boxShadow: '0 0 10px 3px rgba(240,40,34,0.75)' }}
           />
           <ul className="relative">
             {ENTRIES.map((entry, i) => (
