@@ -5,11 +5,6 @@ import { PixelGravityImage, PixelTilt } from './PixelTilt'
 // Third screen, measured from kopster.png (an 815px-wide mock-up). Sits directly
 // below AboutIntro, and its top edge fades up from the flat colour that section
 // ends on, so the join between them doesn't show.
-const STATS = [
-  { value: '08+', label: 'Years Crafting' },
-  { value: '30+', label: 'Digital Products' },
-  { value: '100%', label: 'Full Execution', accent: true },
-]
 
 function CodeIcon() {
   return (
@@ -97,30 +92,9 @@ function DesignerIntro() {
               />
               <span className="relative">My work</span>
             </a>
-
-            <div
-              aria-hidden="true"
-              data-reveal="fade"
-              className="mt-[2.6rem] h-px max-w-[26.75rem] bg-linear-to-r from-white/15 to-transparent"
-            />
-
-            <dl data-reveal="up" className="mt-[1.4rem] grid max-w-[26.75rem] grid-cols-3">
-              {STATS.map((stat) => (
-                <div key={stat.label}>
-                  <dt
-                    className={`text-[1.45rem] leading-none font-medium tracking-[-0.01em] ${
-                      stat.accent ? 'text-coral' : 'text-white'
-                    }`}
-                  >
-                    {stat.value}
-                  </dt>
-                  <dd className="mt-[0.55rem] text-[0.625rem] tracking-[0.02em] text-white/40">{stat.label}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
 
-          <div data-reveal="right" className="relative w-[clamp(15rem,23.5vw,21.2rem)] justify-self-center lg:justify-self-end">
+          <div data-reveal="right" className="relative w-[clamp(18rem,30vw,27rem)] justify-self-center lg:justify-self-end">
             <PixelTilt>
               <div
                 className="relative rounded-[13px] border border-white/[0.07] p-[0.7rem]"

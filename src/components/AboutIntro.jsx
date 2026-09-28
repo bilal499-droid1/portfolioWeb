@@ -71,7 +71,7 @@ function AboutIntro() {
           {ROLES.map((role, i) => (
             <li key={role} className="flex items-center" style={{ gap: u(30) }}>
               {i > 0 && <span aria-hidden="true" className="size-[3px] rounded-full bg-black/60" />}
-              <span className={i === 0 ? 'text-[#e65b5b]' : undefined}>{role}</span>
+              <span className={i === 0 ? 'text-white' : undefined}>{role}</span>
             </li>
           ))}
         </ul>

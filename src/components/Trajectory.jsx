@@ -57,7 +57,6 @@ function useRailProgress() {
 const ENTRIES = [
   {
     range: 'Present',
-    badge: 'Forward Decade',
     title: 'DevOps Trainee at INARA Technologies',
     aside: 'Active Practice',
     subtitle: 'Building, shipping and running software reliably',
@@ -70,7 +69,6 @@ const ENTRIES = [
   },
   {
     range: '2025 — 2026',
-    badge: 'Lead Chapter',
     title: 'Junior UI/UX Designer at Hexler Tech',
     aside: 'Studio / Contract',
     subtitle: 'Designing clear, usable interfaces for real products',
@@ -82,7 +80,6 @@ const ENTRIES = [
   },
   {
     range: '2024 — 2025',
-    badge: 'Scale Up',
     title: 'UI/UX and Frontend Intern at INARA Technologies',
     aside: 'Product Systems',
     subtitle: 'Where design met code',
@@ -94,7 +91,6 @@ const ENTRIES = [
   },
   {
     range: '2021 — 2025',
-    badge: 'Academic Foundation',
     title: 'BS in Software Engineering from University of Engineering and Technology, Taxila',
     aside: 'Education',
     subtitle: 'The engineering foundation behind the design work',
@@ -104,7 +100,7 @@ const ENTRIES = [
 ]
 
 function Entry({ entry, index, total }) {
-  const { range, badge, title, aside, subtitle, body, bullets, featured } = entry
+  const { range, title, aside, subtitle, body, bullets, featured } = entry
   // The rail and its nodes fade with depth, exactly as the mock-up does.
   const fade = 1 - (index / (total - 1)) * 0.62
 
@@ -121,27 +117,13 @@ function Entry({ entry, index, total }) {
         />
       )}
 
-      {/* Left rail: date and chapter badge */}
+      {/* Left rail: date */}
       <div className="relative z-[1] sm:pr-[1.5rem] sm:text-right">
         <p
           className="font-mono text-[0.8125rem] leading-[1.4] tracking-[0.06em] text-balance"
           style={{ color: `rgba(255,255,255,${0.35 + 0.6 * fade})` }}
         >
           {range}
-        </p>
-        <p className="mt-[0.5rem] sm:flex sm:justify-end">
-          <span
-            className={`inline-flex items-center gap-[0.35rem] rounded-full border px-[0.55rem] py-[0.2rem] text-[0.5625rem] tracking-[0.12em] whitespace-nowrap uppercase ${
-              featured
-                ? 'border-[#2ea36a]/45 bg-[#0c2418]/60 text-[#4bd28d]'
-                : index === 1
-                  ? 'border-[#e1201a]/40 bg-[#1e0606]/60 text-[#e4665f]'
-                  : 'border-white/[0.09] bg-white/[0.03] text-white/35'
-            }`}
-          >
-            <span aria-hidden="true" className="size-[3px] rotate-45 bg-current" />
-            {badge}
-          </span>
         </p>
       </div>
 
