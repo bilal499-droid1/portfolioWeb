@@ -114,15 +114,29 @@ function VideoMosaic() {
         <VideoCell src={v2.src} label={v2.label} />
       </div>
 
-      {/* Row 2: portrait | portrait | (2 landscapes stacked) */}
+      {/* Row 2: 2 portraits (spanning both rows) + 2 landscapes stacked */}
       <div
         className="grid gap-[6px]"
-        style={{ gridTemplateColumns: '1fr 1fr 4fr', height: 'clamp(220px, 36vh, 340px)' }}
+        style={{
+          gridTemplateColumns: '1fr 1fr 4fr',
+          gridTemplateRows: '1fr 1fr',
+          height: 'clamp(220px, 36vh, 340px)',
+        }}
       >
-        <VideoCell src={v3.src} label={v3.label} />
-        <VideoCell src={v4.src} label={v4.label} />
-        <div className="grid h-full grid-rows-2 gap-[6px]">
+        {/* portrait — spans both rows */}
+        <div className="h-full" style={{ gridColumn: '1', gridRow: '1 / 3' }}>
+          <VideoCell src={v3.src} label={v3.label} />
+        </div>
+        {/* portrait — spans both rows */}
+        <div className="h-full" style={{ gridColumn: '2', gridRow: '1 / 3' }}>
+          <VideoCell src={v4.src} label={v4.label} />
+        </div>
+        {/* landscape top */}
+        <div className="h-full" style={{ gridColumn: '3', gridRow: '1' }}>
           <VideoCell src={v5.src} label={v5.label} />
+        </div>
+        {/* landscape bottom */}
+        <div className="h-full" style={{ gridColumn: '3', gridRow: '2' }}>
           <VideoCell src={v6.src} label={v6.label} />
         </div>
       </div>
