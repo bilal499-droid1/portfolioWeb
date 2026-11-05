@@ -62,14 +62,34 @@ const MOSAIC_VIDEOS = [
 ]
 
 function VideoCell({ src, label }) {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.play().catch(() => {})
+        } else {
+          el.pause()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
     <div className="group relative h-full overflow-hidden rounded-[14px] bg-[#140304]">
       <video
+        ref={videoRef}
         src={src}
-        autoPlay
         muted
         loop
         playsInline
+        preload="none"
         className="h-full w-full object-cover"
       />
       <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/30" />
