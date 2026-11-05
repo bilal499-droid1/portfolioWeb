@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import HalftoneField from './HalftoneField'
 
 const clamp01 = (n) => (n < 0 ? 0 : n > 1 ? 1 : n)
@@ -53,6 +53,8 @@ function useRailProgress() {
   return { track, fill, head }
 }
 
+const TABS = ['Experience', 'UI/UX & Development', 'Animation & Motion']
+
 // Sixth screen ("Trajectory"), measured from suv5.png (a 510px-wide mock-up).
 const ENTRIES = [
   {
@@ -96,6 +98,80 @@ const ENTRIES = [
     subtitle: 'The engineering foundation behind the design work',
     body: 'Studied the full software development lifecycle, from requirements and system design to programming, testing and project management, alongside human-computer interaction, which shaped my interest in user-centred design.',
     bullets: ['Built a strong base in software design, development and teamwork'],
+  },
+]
+
+const UIUX_ENTRIES = [
+  {
+    range: '2025 — 2026',
+    title: 'Product Design — Hexler Tech',
+    aside: 'Studio / Contract',
+    subtitle: 'End-to-end interface design for web and mobile',
+    body: 'Led the full visual design process from discovery to developer handoff. Defined information architecture, produced wire-frames and high-fidelity mock-ups, and assembled a Figma component library used across every product screen.',
+    bullets: [
+      'Figma design systems: tokens, auto-layout, variants',
+      'User flows, journey maps and usability-tested prototypes',
+    ],
+    featured: true,
+  },
+  {
+    range: '2024 — 2025',
+    title: 'UI/UX Intern — INARA Technologies',
+    aside: 'Product Systems',
+    subtitle: 'Design-to-code across client dashboards',
+    body: 'Bridged design and engineering by owning the Figma spec and translating it into responsive React pages. Ran internal design reviews and iterated screens based on developer and stakeholder feedback.',
+    bullets: [
+      'Responsive layout design with Tailwind utility classes',
+      'Component annotation and redline documentation for dev handoff',
+    ],
+  },
+  {
+    range: '2023',
+    title: 'Freelance UI Design',
+    aside: 'Independent',
+    subtitle: 'Brand identities and landing pages',
+    body: 'Took on independent projects to design landing pages and brand identities for small businesses, sharpening visual communication skills outside the classroom.',
+    bullets: [
+      'Logo, type and colour-palette systems',
+      'Conversion-focused landing page layouts',
+    ],
+  },
+]
+
+const POST_ENTRIES = [
+  {
+    range: '2024 — Present',
+    title: 'Motion & Video Editor — Hexler Tech',
+    aside: 'Studio / Contract',
+    subtitle: 'Branded reels, case-study films and social content',
+    body: 'Cut and graded product demo videos, case-study films and short-form social content for client brands. Handled the full post pipeline from raw footage review through colour grade, sound mix and final export.',
+    bullets: [
+      'Premiere Pro & After Effects for edit and motion graphics',
+      'Colour grading, LUT creation and audio sweetening',
+    ],
+    featured: true,
+  },
+  {
+    range: '2023 — 2024',
+    title: 'Motion Graphics — INARA Technologies',
+    aside: 'Product Systems',
+    subtitle: 'Animated UI walkthroughs and promo assets',
+    body: "Created animated product walkthroughs and marketing promo assets that showcased software features. Designed title sequences and lower-thirds consistent with each product's visual identity.",
+    bullets: [
+      'After Effects animations and looping UI demos',
+      'Export pipelines for web, social and presentation formats',
+    ],
+  },
+  {
+    range: '2022 — 2023',
+    title: 'Freelance Video Production',
+    aside: 'Independent',
+    subtitle: 'Event coverage and short-form content',
+    body: 'Shot and edited event-coverage videos and short-form brand films. Managed solo production: filming, editing and colour, delivering final cuts directly to clients.',
+    bullets: [
+      'Single-operator shoot-and-edit workflow',
+      'Thumbnail design and YouTube-optimised exports',
+    ],
   },
 ]
 
@@ -176,8 +252,16 @@ function Entry({ entry, index, total }) {
   )
 }
 
+const TAB_ENTRIES = {
+  Experience: ENTRIES,
+  'UI/UX & Development': UIUX_ENTRIES,
+  'Animation & Motion': POST_ENTRIES,
+}
+
 function Trajectory() {
   const { track, fill, head } = useRailProgress()
+  const [activeTab, setActiveTab] = useState('Experience')
+  const entries = TAB_ENTRIES[activeTab]
 
   return (
     <section id="trajectory" className="relative isolate -mt-px overflow-hidden bg-[#0a0101] font-jost text-white">
@@ -201,21 +285,44 @@ function Trajectory() {
       />
 
       <div className="relative mx-auto max-w-[56rem] px-[6vw] pt-[clamp(3.5rem,7vw,6rem)] pb-[clamp(4rem,8vw,7rem)]">
-        <p className="flex justify-center">
-          <span className="inline-flex items-center gap-[0.45rem] rounded-full border border-[#e1201a]/35 bg-[#1a0505]/70 px-[0.8rem] py-[0.28rem] text-[0.5625rem] tracking-[0.2em] text-[#d8534c] uppercase">
-            <span aria-hidden="true" className="size-[4px] rotate-45 bg-[#e1201a]" />
-            Chronology &amp; Evolution
-          </span>
-        </p>
+        {/* Header row: badge + heading on the left, tabs on the right */}
+        <div className="flex flex-col items-start gap-[1.25rem] sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p>
+              <span className="inline-flex items-center gap-[0.45rem] rounded-full border border-[#e1201a]/35 bg-[#1a0505]/70 px-[0.8rem] py-[0.28rem] text-[0.5625rem] tracking-[0.2em] text-[#d8534c] uppercase">
+                <span aria-hidden="true" className="size-[4px] rotate-45 bg-[#e1201a]" />
+                Chronology &amp; Evolution
+              </span>
+            </p>
+            <h2 className="mt-[1.1rem] text-[clamp(1.5rem,2.45vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.02em] text-white">
+              My Professional Journey
+            </h2>
+            <p className="mt-[0.75rem] max-w-[27rem] text-[0.8125rem] leading-[1.6] text-white/35">
+              An open-ended dual timeline tracking academic foundations through high-impact product architecture and
+              forward-looking autonomous AI design systems.
+            </p>
+          </div>
 
-        <h2 className="mt-[1.35rem] text-center text-[clamp(1.5rem,2.45vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.02em] text-white">
-          My Professional Journey
-        </h2>
-
-        <p className="mx-auto mt-[0.9rem] max-w-[27rem] text-center text-[0.8125rem] leading-[1.6] text-white/35">
-          An open-ended dual timeline tracking academic foundations through high-impact product architecture and
-          forward-looking autonomous AI design systems.
-        </p>
+          {/* Tab switcher */}
+          <div className="flex shrink-0 items-center gap-[0.3rem] rounded-full border border-white/[0.07] bg-white/[0.03] p-[0.25rem]">
+            {TABS.map((tab) => {
+              const active = tab === activeTab
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`relative rounded-full px-[0.85rem] py-[0.35rem] text-[0.6875rem] tracking-[0.04em] font-medium transition-colors duration-200 ${
+                    active
+                      ? 'bg-[#e1201a] text-white shadow-[0_0_10px_rgba(225,32,26,0.45)]'
+                      : 'text-white/40 hover:text-white/70'
+                  }`}
+                >
+                  {tab}
+                </button>
+              )
+            })}
+          </div>
+        </div>
 
         {/* The rail runs behind the nodes: a faint track, and a red fill that grows down
             it as the reader scrolls. */}
@@ -243,8 +350,8 @@ function Trajectory() {
             style={{ left: 'calc(11rem + 0.5px)', top: 0, boxShadow: '0 0 10px 3px rgba(240,40,34,0.75)' }}
           />
           <ul className="relative">
-            {ENTRIES.map((entry, i) => (
-              <Entry key={entry.range} entry={entry} index={i} total={ENTRIES.length} />
+            {entries.map((entry, i) => (
+              <Entry key={`${activeTab}-${entry.range}`} entry={entry} index={i} total={entries.length} />
             ))}
           </ul>
         </div>

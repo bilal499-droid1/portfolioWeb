@@ -6,48 +6,110 @@ import HalftoneField from './HalftoneField'
 // fully red — which reads as one frame of a hover/scroll reveal rather than
 // three different card designs, so the red state lives on :hover here.
 
-const PROJECTS = [
-  {
-    title: 'Finance Management Portal',
-    role: 'UI Design & Full-Stack Implementation',
-    blurb:
-      'Designed a personal finance dashboard for expense tracking and budget visualization, prioritizing at-a-glance financial clarity over dense tabular data. Implemented a MySQL-backed data layer with real-time chart rendering to turn raw transaction records into readable visual summaries.',
-    tags: ['React.js', 'Tailwind CSS', 'JavaScript', 'MySQL'],
-  },
-  {
-    title: 'Parking Management System',
-    role: 'Full-Stack Application',
-    blurb:
-      'Designed a real-time occupancy dashboard that lets facility operators view and allocate parking slots instantly. Architected role-based Admin and End User views so each stakeholder only sees the workflows relevant to their responsibilities.',
-    tags: ['React.js', 'Tailwind CSS', 'JavaFX', 'Oracle DB'],
-  },
-  {
-    title: 'Fatwrap.pk',
-    url: 'https://fatwrap.pk',
-    role: 'Brand Identity, UI/UX Design & Social Media Marketing',
-    blurb:
-      "Designed end-to-end UI/UX for a food brand's ordering experience, from user journey maps through prototypes covering menu browsing to order confirmation. Created a mobile-first interface with a food-forward visual hierarchy and clearly placed CTAs to support conversion goals. Ran Instagram campaigns for the brand, producing mostly static posts alongside a handful of reels to build visibility and engagement.",
-    tags: ['Figma', 'Adobe Illustrator', 'Photoshop'],
-  },
-  {
-    title: 'Sugarloop.pk',
-    url: 'https://sugarloop.pk',
-    role: 'Brand Identity, UI/UX Design & Social Media Marketing',
-    blurb:
-      "Developed user personas, empathy maps, and interaction flows to translate a bakery brand's product experience into a digital presence. Designed a high-fidelity mobile interface with a visual product showcase and a streamlined ordering flow that reduced steps from discovery to checkout. Ran Instagram campaigns to promote the doughnut offerings and grow audience engagement.",
-    tags: ['Figma', 'Adobe Photoshop'],
-  },
-  {
-    title: 'Kricket.pk',
-    url: 'https://kricket.pk',
-    role: 'UI / UX Designer and Frontend Developer',
-    blurb:
-      'A cricket-focused digital experience built around clarity, accessibility, and visual engagement. The interface organizes cricket content into an intuitive structure while maintaining a modern, responsive design across devices.',
-    tags: ['JavaScript', 'Figma', 'React', 'Tailwind'],
-  },
-].map((p, i) => ({ ...p, n: String(i + 1).padStart(2, '0') }))
+const WORK_TABS = ['UI/UX & Development', 'Animation & Motion']
 
-const TOTAL = String(PROJECTS.length).padStart(2, '0')
+const ALL_PROJECTS = {
+  'UI/UX & Development': [
+    {
+      title: 'Finance Management Portal',
+      role: 'UI Design & Full-Stack Implementation',
+      blurb:
+        'Designed a personal finance dashboard for expense tracking and budget visualization, prioritizing at-a-glance financial clarity over dense tabular data. Implemented a MySQL-backed data layer with real-time chart rendering to turn raw transaction records into readable visual summaries.',
+      tags: ['React.js', 'Tailwind CSS', 'JavaScript', 'MySQL'],
+    },
+    {
+      title: 'Parking Management System',
+      role: 'Full-Stack Application',
+      blurb:
+        'Designed a real-time occupancy dashboard that lets facility operators view and allocate parking slots instantly. Architected role-based Admin and End User views so each stakeholder only sees the workflows relevant to their responsibilities.',
+      tags: ['React.js', 'Tailwind CSS', 'JavaFX', 'Oracle DB'],
+    },
+    {
+      title: 'Fatwrap.pk',
+      url: 'https://fatwrap.pk',
+      role: 'Brand Identity, UI/UX Design & Social Media Marketing',
+      blurb:
+        "Designed end-to-end UI/UX for a food brand's ordering experience, from user journey maps through prototypes covering menu browsing to order confirmation. Created a mobile-first interface with a food-forward visual hierarchy and clearly placed CTAs to support conversion goals.",
+      tags: ['Figma', 'Adobe Illustrator', 'Photoshop'],
+    },
+    {
+      title: 'Sugarloop.pk',
+      url: 'https://sugarloop.pk',
+      role: 'Brand Identity, UI/UX Design & Social Media Marketing',
+      blurb:
+        "Developed user personas, empathy maps, and interaction flows to translate a bakery brand's product experience into a digital presence. Designed a high-fidelity mobile interface with a visual product showcase and a streamlined ordering flow that reduced steps from discovery to checkout.",
+      tags: ['Figma', 'Adobe Photoshop'],
+    },
+    {
+      title: 'Kricket.pk',
+      url: 'https://kricket.pk',
+      role: 'UI / UX Designer and Frontend Developer',
+      blurb:
+        'A cricket-focused digital experience built around clarity, accessibility, and visual engagement. The interface organizes cricket content into an intuitive structure while maintaining a modern, responsive design across devices.',
+      tags: ['JavaScript', 'Figma', 'React', 'Tailwind'],
+    },
+  ],
+}
+
+const MOSAIC_VIDEOS = [
+  { src: '/videos/apple.mp4',              label: 'Apple' },
+  { src: '/videos/brain_test.mp4',         label: 'Brain Test' },
+  { src: '/videos/main_comp.mp4',          label: 'Main Comp' },
+  { src: '/videos/practice.mp4',           label: 'Practice' },
+  { src: '/videos/extended_sugarloop.mp4', label: 'Sugarloop' },
+  { src: '/videos/elevenlabs_voice.mp4',   label: 'ElevenLabs' },
+  { src: '/videos/docker.mp4',             label: 'Docker' },
+]
+
+function VideoCell({ src, label }) {
+  return (
+    <div className="group relative h-full overflow-hidden rounded-[14px] bg-[#140304]">
+      <video
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="h-full w-full object-cover"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/30" />
+      <span className="absolute bottom-2 left-3 text-[0.6rem] tracking-[0.1em] uppercase text-white/0 transition-colors duration-300 group-hover:text-white/60">
+        {label}
+      </span>
+    </div>
+  )
+}
+
+function VideoMosaic() {
+  const [v0, v1, v2, v3, v4, v5, v6] = MOSAIC_VIDEOS
+  return (
+    <div className="flex w-full flex-col gap-[6px]">
+      {/* Row 1: wide | portrait | wide */}
+      <div
+        className="grid gap-[6px]"
+        style={{ gridTemplateColumns: '3fr 1fr 3fr', height: 'clamp(180px, 30vh, 290px)' }}
+      >
+        <VideoCell src={v0.src} label={v0.label} />
+        <VideoCell src={v1.src} label={v1.label} />
+        <VideoCell src={v2.src} label={v2.label} />
+      </div>
+
+      {/* Row 2: portrait | portrait | (2 landscapes stacked) */}
+      <div
+        className="grid gap-[6px]"
+        style={{ gridTemplateColumns: '1fr 1fr 4fr', height: 'clamp(220px, 36vh, 340px)' }}
+      >
+        <VideoCell src={v3.src} label={v3.label} />
+        <VideoCell src={v4.src} label={v4.label} />
+        <div className="grid h-full grid-rows-2 gap-[6px]">
+          <VideoCell src={v5.src} label={v5.label} />
+          <VideoCell src={v6.src} label={v6.label} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 
 // The stack anchor, and how far each card's top sits below the one it covers, so the
 // deck shows its edges instead of one card hiding the rest completely.
@@ -111,7 +173,7 @@ function useCardStack(on, wraps, inners, veils) {
   }, [on, wraps, inners, veils])
 }
 
-function ProjectCard({ n, title, url, role, blurb, tags }) {
+function ProjectCard({ n, total, title, url, role, blurb, tags }) {
   return (
     <article data-reveal="up-lg" className="group relative overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0e0403] px-[clamp(1.75rem,3.75vw,3.4rem)] pt-[clamp(3rem,7.4vw,6.7rem)] pb-[clamp(2.5rem,5.5vw,5rem)] transition-colors duration-500 hover:border-[#e1201a]/35">
       {/* Red bloom, revealed on hover. */}
@@ -135,7 +197,7 @@ function ProjectCard({ n, title, url, role, blurb, tags }) {
 
       <div data-reveal="up" data-reveal-delay="160" className="relative max-w-[46rem]">
         <p className="text-[0.625rem] tracking-[0.18em] text-[#d23f50]">
-          {n} <span className="px-[0.25em] text-[#d23f50]/60">/</span> {TOTAL}
+          {n} <span className="px-[0.25em] text-[#d23f50]/60">/</span> {total}
         </p>
 
         <h3 className="mt-[1.2rem] text-[clamp(1.6rem,2.78vw,2.5rem)] leading-none font-bold tracking-[-0.01em] text-white transition-colors duration-500 group-hover:text-[#e1201a]">
@@ -189,10 +251,16 @@ function ProjectCard({ n, title, url, role, blurb, tags }) {
 }
 
 function WorkList() {
+  const [activeTab, setActiveTab] = useState(WORK_TABS[0])
   const [stack, setStack] = useState(() => window.matchMedia(STACKABLE).matches)
   const wraps = useRef([])
   const inners = useRef([])
   const veils = useRef([])
+
+  const projects = (ALL_PROJECTS[activeTab] || []).map((p, i) => ({
+    ...p,
+    n: String(i + 1).padStart(2, '0'),
+  }))
 
   useEffect(() => {
     const mq = window.matchMedia(STACKABLE)
@@ -236,18 +304,44 @@ function WorkList() {
       />
 
       <div className="relative mx-auto max-w-[1600px] px-[8vw] pt-[clamp(4rem,8vw,7rem)] pb-[clamp(4rem,8vw,7rem)] lg:pr-[24vw]">
-        <h2 data-reveal="up" className="mb-[clamp(3rem,7vw,6.5rem)] text-center text-[clamp(2.25rem,5vw,4.5rem)] leading-none font-bold tracking-[-0.02em] text-white lg:-mr-[16vw]">
-          My Work
-        </h2>
+        {/* Header row: title on the left, tabs on the right */}
+        <div className="mb-[clamp(3rem,7vw,6.5rem)] flex flex-col items-start gap-[1.5rem] sm:flex-row sm:items-center sm:justify-between lg:-mr-[16vw]">
+          <h2 data-reveal="up" className="text-[clamp(2.25rem,5vw,4.5rem)] leading-none font-bold tracking-[-0.02em] text-white">
+            My Work
+          </h2>
 
-        {/* Stacked, the gap is what each card stays pinned for before the next one
-            reaches it, so it is opened up to give the hand-off room to read. */}
+          {/* Tab switcher — same pill style as Trajectory */}
+          <div className="flex shrink-0 items-center gap-[0.3rem] rounded-full border border-white/[0.07] bg-white/[0.03] p-[0.25rem]">
+            {WORK_TABS.map((tab) => {
+              const active = tab === activeTab
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`relative rounded-full px-[0.85rem] py-[0.35rem] text-[0.6875rem] tracking-[0.04em] font-medium transition-colors duration-200 ${
+                    active
+                      ? 'bg-[#e1201a] text-white shadow-[0_0_10px_rgba(225,32,26,0.45)]'
+                      : 'text-white/40 hover:text-white/70'
+                  }`}
+                >
+                  {tab}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {activeTab === 'Animation & Motion' ? (
+          <VideoMosaic />
+        ) : (
+        /* Stacked, the gap is what each card stays pinned for before the next one
+           reaches it, so it is opened up to give the hand-off room to read. */
         <div
           className={`flex flex-col ${
             stack ? 'gap-[clamp(4rem,11vw,11rem)] pb-[clamp(3rem,8vw,8rem)]' : 'gap-[clamp(1.75rem,5.35vw,4.8rem)]'
           }`}
         >
-          {PROJECTS.map((p, i) => (
+          {projects.map((p, i) => (
             <div
               key={p.n}
               ref={(el) => {
@@ -264,7 +358,7 @@ function WorkList() {
                 className="relative will-change-transform"
                 style={{ transformOrigin: 'top center' }}
               >
-                <ProjectCard {...p} />
+                <ProjectCard {...p} total={String(projects.length).padStart(2, '0')} />
 
                 {/* Dims the card as the next one comes over it, so it reads as
                     receding rather than simply being hidden. */}
@@ -281,6 +375,7 @@ function WorkList() {
             </div>
           ))}
         </div>
+        )}
       </div>
     </section>
   )
