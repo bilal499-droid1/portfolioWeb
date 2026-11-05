@@ -61,7 +61,7 @@ const MOSAIC_VIDEOS = [
   { src: '/videos/docker.mp4',             label: 'Docker' },
 ]
 
-function VideoCell({ src, label }) {
+function VideoCell({ src, label, style }) {
   const videoRef = useRef(null)
 
   useEffect(() => {
@@ -82,7 +82,7 @@ function VideoCell({ src, label }) {
   }, [])
 
   return (
-    <div className="group relative h-full overflow-hidden rounded-[14px] bg-[#140304]">
+    <div className="group relative overflow-hidden rounded-[14px] bg-[#140304]" style={{ height: '100%', ...style }}>
       <video
         ref={videoRef}
         src={src}
@@ -90,7 +90,7 @@ function VideoCell({ src, label }) {
         loop
         playsInline
         preload="none"
-        className="h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/30" />
       <span className="absolute bottom-2 left-3 text-[0.6rem] tracking-[0.1em] uppercase text-white/0 transition-colors duration-300 group-hover:text-white/60">
@@ -105,39 +105,19 @@ function VideoMosaic() {
   return (
     <div className="flex w-full flex-col gap-[6px]">
       {/* Row 1: wide | portrait | wide */}
-      <div
-        className="grid gap-[6px]"
-        style={{ gridTemplateColumns: '3fr 1fr 3fr', height: 'clamp(180px, 30vh, 290px)' }}
-      >
-        <VideoCell src={v0.src} label={v0.label} />
-        <VideoCell src={v1.src} label={v1.label} />
-        <VideoCell src={v2.src} label={v2.label} />
+      <div style={{ display: 'flex', gap: '6px', height: 'clamp(180px, 30vh, 290px)' }}>
+        <div style={{ flex: 3, position: 'relative' }}><VideoCell src={v0.src} label={v0.label} /></div>
+        <div style={{ flex: 1, position: 'relative' }}><VideoCell src={v1.src} label={v1.label} /></div>
+        <div style={{ flex: 3, position: 'relative' }}><VideoCell src={v2.src} label={v2.label} /></div>
       </div>
 
-      {/* Row 2: 2 portraits (spanning both rows) + 2 landscapes stacked */}
-      <div
-        className="grid gap-[6px]"
-        style={{
-          gridTemplateColumns: '1fr 1fr 4fr',
-          gridTemplateRows: '1fr 1fr',
-          height: 'clamp(220px, 36vh, 340px)',
-        }}
-      >
-        {/* portrait — spans both rows */}
-        <div className="h-full" style={{ gridColumn: '1', gridRow: '1 / 3' }}>
-          <VideoCell src={v3.src} label={v3.label} />
-        </div>
-        {/* portrait — spans both rows */}
-        <div className="h-full" style={{ gridColumn: '2', gridRow: '1 / 3' }}>
-          <VideoCell src={v4.src} label={v4.label} />
-        </div>
-        {/* landscape top */}
-        <div className="h-full" style={{ gridColumn: '3', gridRow: '1' }}>
-          <VideoCell src={v5.src} label={v5.label} />
-        </div>
-        {/* landscape bottom */}
-        <div className="h-full" style={{ gridColumn: '3', gridRow: '2' }}>
-          <VideoCell src={v6.src} label={v6.label} />
+      {/* Row 2: 2 portrait columns + 1 column with 2 stacked landscapes */}
+      <div style={{ display: 'flex', gap: '6px', height: 'clamp(220px, 36vh, 340px)' }}>
+        <div style={{ flex: 1, position: 'relative' }}><VideoCell src={v3.src} label={v3.label} /></div>
+        <div style={{ flex: 1, position: 'relative' }}><VideoCell src={v4.src} label={v4.label} /></div>
+        <div style={{ flex: 4, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ flex: 1, position: 'relative' }}><VideoCell src={v5.src} label={v5.label} /></div>
+          <div style={{ flex: 1, position: 'relative' }}><VideoCell src={v6.src} label={v6.label} /></div>
         </div>
       </div>
     </div>
